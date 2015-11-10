@@ -5,6 +5,7 @@ Notes:
     ☐ Describe the API to handle requests
     ☐ Implement a 'tick' event, which brings the character progress forward.
         Should 'tick' happen / GET?
+    ☐ Events will be from a pool of event in a certain combination?
 
 User Scenarios:
     ☐ As a client(cli, webapp) I would like to create a character
