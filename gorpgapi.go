@@ -1,35 +1,32 @@
 package main
 
 import (
-	"fmt"
+	"encoding/json"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
+func main() {
+	http.HandleFunc("/", Index)
+	log.Printf("Starting server to listen on port: 8989...")
+	http.ListenAndServe(":8989", nil)
+}
+
 // The main function which starts the rpg.
 func handler() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", Index)
-	router.HandleFunc("/todos", TodoIndex)
-	router.HandleFunc("/todos/{todoId}", TodoShow)
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
 
 //Index Index request handler
 func Index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Welcome!")
-}
-
-//TodoIndex Todo index handler
-func TodoIndex(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Todo Index!")
-}
-
-//TodoShow show todo id
-func TodoShow(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	todoID := vars["todoId"]
-	fmt.Fprintln(w, "Todo show:", todoID)
+	welcome := struct {
+		message string
+	}{
+		"Welcome!",
+	}
+	json.NewEncoder(w).Encode(welcome)
 }
