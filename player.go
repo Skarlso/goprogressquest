@@ -17,6 +17,10 @@ type Inventory struct {
 type Stats struct {
 	str int
 	agi int
+	in  int
+	per int
+	chr int
+	lck int
 }
 
 //Character is a player character
@@ -24,4 +28,5 @@ type Character struct {
 	inventory Inventory
 	name      string
 	stats     Stats
+	id        string
 }

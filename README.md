@@ -3,7 +3,41 @@ Go Progress Quest
 This will be a Go Implementation of the famous type of RPG, called:
 https://en.wikipedia.org/wiki/Progress_Quest
 
-Character Creation Screen
--------------------------
+This will be an API which can be consumed by any client in a number of ways.
 
-![Character Creation](/view/img/screenshot.png)
+API Version is 1
+----------------
+
+/api/1/*
+
+The following end-points are available:
+
+```
+/
+```
+Currently returns:
+```json
+{
+    "message":"Welcome!"
+}
+```
+
+
+```bash
+# Character names don't have to be unique
+/register
+```
+```json
+POST:
+{
+    "character":{
+        "name":"MyAwesomeCharacterName"
+    }
+}
+```
+Return: (Something like this)
+```json
+{
+    "characterId":"103b922810b1fac97da1bad872618477"
+}
+```
