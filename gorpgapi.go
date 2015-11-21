@@ -11,7 +11,7 @@ import (
 // The main function which starts the rpg.
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/", Index)
+	router.HandleFunc("/api/1/", Index)
 	log.Printf("Starting server to listen on port: 8989...")
 	log.Fatal(http.ListenAndServe(":8989", router))
 }
