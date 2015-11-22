@@ -41,3 +41,10 @@ Return: (Something like this)
     "characterId":"103b922810b1fac97da1bad872618477"
 }
 ```
+
+Running it
+----------
+
+To run it, you have to install the app by typeing ```go install``` from the main directory. The switch to your go installation's bin directory and run the created goprogressquest file. That should start the server. If you are developing and don't want to swith around, ```go run``` needs all the files as parameter.
+
+```go run gorpgapi.go middleware.go response_types.go```
