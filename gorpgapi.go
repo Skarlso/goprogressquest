@@ -6,24 +6,36 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/justinas/alice"
 )
 
-// The main function which starts the rpg.
+//APIVERSION Is the current API version
+const APIVERSION = "1"
+
+// The main function which starts the rpg
 func main() {
+	handlerChain := alice.New(Logging, PanicHandler)
 	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/api/1/", Index)
+	router.Handle("/api/"+APIVERSION+"/", handlerChain.ThenFunc(index))
+	router.Handle("/api/"+APIVERSION+"/create", handlerChain.ThenFunc(create))
 	log.Printf("Starting server to listen on port: 8989...")
 	log.Fatal(http.ListenAndServe(":8989", router))
 }
 
-//Index Index request handler
-func Index(w http.ResponseWriter, r *http.Request) {
-	welcome := struct {
-		//Message in order for it to be unmarshalled it must be exported
-		Message string `json:"message"`
-	}{
-		"Welcome!",
-	}
+//index Index request handler
+func index(w http.ResponseWriter, r *http.Request) {
+	m := Message{}
+	m.Message = "Welcome to my RPG"
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(welcome)
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(m)
+}
+
+//register handling the creation of a new character
+func create(w http.ResponseWriter, r *http.Request) {
+	ch := NewCharacter{}
+	ch.CharacterID = "Some Random Generated ID"
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(ch)
 }
