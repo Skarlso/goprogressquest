@@ -19,12 +19,15 @@ const APIVERSION = "1"
 //READLIMIT 1 MiB read limit
 const READLIMIT = 1048576
 
+//APIBASE Defines the API base URI
+const APIBASE = "/api/" + APIVERSION + "/"
+
 // The main function which starts the rpg
 func main() {
 	handlerChain := alice.New(Logging, PanicHandler)
 	router := mux.NewRouter().StrictSlash(true)
-	router.Handle("/api/"+APIVERSION+"/", handlerChain.ThenFunc(index)).Methods("GET")
-	router.Handle("/api/"+APIVERSION+"/create", handlerChain.ThenFunc(create)).Methods("POST")
+	router.Handle(APIBASE, handlerChain.ThenFunc(index)).Methods("GET")
+	router.Handle(APIBASE+"/create", handlerChain.ThenFunc(create)).Methods("POST")
 	log.Printf("Starting server to listen on port: 8989...")
 	log.Fatal(http.ListenAndServe(":8989", router))
 }
