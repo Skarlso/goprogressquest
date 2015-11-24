@@ -3,7 +3,6 @@ package main
 import (
 	"crypto/sha1"
 	"encoding/json"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -65,7 +64,6 @@ func create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	checkSum := sha1.Sum([]byte(newName.Name))
-	ch.CharacterID = fmt.Sprintf("%x", checkSum)
 	log.Printf("Created character sha hash: %v", ch.CharacterID)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
