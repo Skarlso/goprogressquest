@@ -51,17 +51,26 @@ func create(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500) // unprocessable entity
-		json.NewEncoder(w).Encode(err)
+		errorResponse := ErrorResponse{}
+		errorResponse.ErrorMessage = fmt.Sprintf("Error occured while reading the body: %v", err)
+		json.NewEncoder(w).Encode(errorResponse)
+		return
 	}
 	if err := r.Body.Close(); err != nil {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(500) // unprocessable entity
-		json.NewEncoder(w).Encode(err)
+		errorResponse := ErrorResponse{}
+		errorResponse.ErrorMessage = fmt.Sprintf("Error occured while closing the body: %v", err)
+		json.NewEncoder(w).Encode(errorResponse)
+		return
 	}
 	if err := json.Unmarshal(body, &newName); err != nil {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(422) // unprocessable entity
-		json.NewEncoder(w).Encode(err)
+		errorResponse := ErrorResponse{}
+		errorResponse.ErrorMessage = fmt.Sprintf("Error occured while formatting request: %v", err)
+		json.NewEncoder(w).Encode(errorResponse)
+		return
 	}
 
 	checkSum := sha1.Sum([]byte(newName.Name))

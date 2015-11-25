@@ -9,3 +9,8 @@ type Message struct {
 type NewCharacter struct {
 	CharacterID string `json:"id"`
 }
+
+//ErrorResponse A wrapped error response with proper message
+type ErrorResponse struct {
+	ErrorMessage string `json:"error"`
+}
