@@ -49,27 +49,15 @@ func create(w http.ResponseWriter, r *http.Request) {
 	ch := NewCharacter{}
 	body, err := ioutil.ReadAll(io.LimitReader(r.Body, READLIMIT))
 	if err != nil {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(500) // unprocessable entity
-		errorResponse := ErrorResponse{}
-		errorResponse.ErrorMessage = fmt.Sprintf("Error occured while reading the body: %v", err)
-		json.NewEncoder(w).Encode(errorResponse)
+		handleError(w, "Error occured while reading the body:")
 		return
 	}
 	if err := r.Body.Close(); err != nil {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(500) // unprocessable entity
-		errorResponse := ErrorResponse{}
-		errorResponse.ErrorMessage = fmt.Sprintf("Error occured while closing the body: %v", err)
-		json.NewEncoder(w).Encode(errorResponse)
+		handleError(w, fmt.Sprintf("Error occured while closing the body: %v", err))
 		return
 	}
 	if err := json.Unmarshal(body, &newName); err != nil {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(422) // unprocessable entity
-		errorResponse := ErrorResponse{}
-		errorResponse.ErrorMessage = fmt.Sprintf("Error occured while formatting request: %v", err)
-		json.NewEncoder(w).Encode(errorResponse)
+		handleError(w, fmt.Sprintf("Error occured while formatting request: %v", err))
 		return
 	}
 
@@ -79,4 +67,12 @@ func create(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(ch)
+}
+
+func handleError(w http.ResponseWriter, s string) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500) // unprocessable entity
+	errorResponse := ErrorResponse{}
+	errorResponse.ErrorMessage = fmt.Sprintf(s)
+	json.NewEncoder(w).Encode(errorResponse)
 }
