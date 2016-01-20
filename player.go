@@ -29,4 +29,5 @@ type Character struct {
 	name      string
 	stats     Stats
 	id        string
+	gold      int
 }
