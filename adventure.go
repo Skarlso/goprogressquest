@@ -17,7 +17,7 @@ func StartAdventure(w http.ResponseWriter, r *http.Request) {
 	go func() {
 		for {
 			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(http.StatusCreated)
+			w.WriteHeader(http.StatusOK)
 			json.NewEncoder(w).Encode(m)
 			if <-adventureSignal {
 				m = Message{}
@@ -34,7 +34,7 @@ func StopAdventure(w http.ResponseWriter, r *http.Request) {
 	//signal channel to stop fight.
 	adventureSignal <- true
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
+	w.WriteHeader(http.StatusOK)
 	m := Message{}
 	m.Message = "Stop adventuring signalled."
 	json.NewEncoder(w).Encode(m)
