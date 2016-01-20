@@ -28,8 +28,8 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.Handle(APIBASE+"/", handlerChain.ThenFunc(index)).Methods("GET")
 	router.Handle(APIBASE+"/create", handlerChain.ThenFunc(create)).Methods("POST")
-	router.Handle(APIBASE+"/start", handlerChain.ThenFunc(startAdventure)).Methods("POST")
-	router.Handle(APIBASE+"/stop", handlerChain.ThenFunc(stopAdventure)).Methods("POST")
+	router.Handle(APIBASE+"/start", handlerChain.ThenFunc(StartAdventure)).Methods("POST")
+	router.Handle(APIBASE+"/stop", handlerChain.ThenFunc(StopAdventure)).Methods("POST")
 	log.Printf("Starting server to listen on port: 8989...")
 	log.Fatal(http.ListenAndServe(":8989", router))
 }
