@@ -22,14 +22,14 @@ const READLIMIT = 1048576
 //APIBASE Defines the API base URI
 const APIBASE = "/api/" + APIVERSION
 
-var adventureSignal = make(chan bool)
-
 // The main function which starts the rpg
 func main() {
 	handlerChain := alice.New(Logging, PanicHandler)
 	router := mux.NewRouter().StrictSlash(true)
 	router.Handle(APIBASE+"/", handlerChain.ThenFunc(index)).Methods("GET")
 	router.Handle(APIBASE+"/create", handlerChain.ThenFunc(create)).Methods("POST")
+	router.Handle(APIBASE+"/start", handlerChain.ThenFunc(startAdventure)).Methods("POST")
+	router.Handle(APIBASE+"/stop", handlerChain.ThenFunc(stopAdventure)).Methods("POST")
 	log.Printf("Starting server to listen on port: 8989...")
 	log.Fatal(http.ListenAndServe(":8989", router))
 }
@@ -69,38 +69,6 @@ func create(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(ch)
-}
-
-//startAdventure starts and adventure in an endless for loop, until a channel signals otherwise
-func startAdventure(w http.ResponseWriter, r *http.Request) {
-	//First, make it work.
-	//second, make it right.
-	//Third, make it fast.
-	m := Message{}
-	m.Message = "Started adventuring"
-	go func() {
-		for {
-			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(http.StatusCreated)
-			json.NewEncoder(w).Encode(m)
-			if <-adventureSignal {
-				m = Message{}
-				m.Message = "Stopped adventuring"
-				json.NewEncoder(w).Encode(m)
-				break
-			}
-		}
-	}()
-}
-
-func stopAdventure(w http.ResponseWriter, r *http.Request) {
-	//signal channel to stop fight.
-	adventureSignal <- true
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
-	m := Message{}
-	m.Message = "Stop adventuring signalled."
-	json.NewEncoder(w).Encode(m)
 }
 
 func handleError(w http.ResponseWriter, s string) {
