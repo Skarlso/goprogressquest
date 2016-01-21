@@ -14,3 +14,8 @@ type NewCharacter struct {
 type ErrorResponse struct {
 	ErrorMessage string `json:"error"`
 }
+
+//LookingForID encloses the ID which is searched for when looking for a Player
+type LookingForID struct {
+	ID string `json:"id"`
+}
