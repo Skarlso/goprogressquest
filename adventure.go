@@ -31,20 +31,20 @@ func startAdventure(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(m)
-	go func() {
+	go func(name string) {
 		// w.Header().Set("Content-Type", "application/json")
 		// w.WriteHeader(http.StatusOK)
 		for {
 			select {
 			case <-adventureSignal:
-				log.Println("Stopping adventuring...")
+				log.Println("Stopping adventuring for:", name)
 				return
 			default:
 				log.Println("Adventuring...")
 				time.Sleep(time.Millisecond * 500)
 			}
 		}
-	}()
+	}(adventurer.Name)
 }
 
 //StopAdventure Stop adventuring
