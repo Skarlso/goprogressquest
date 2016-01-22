@@ -13,9 +13,9 @@ type MongoDBConnection struct {
 }
 
 //Save will save a player using mongodb as a storage medium
-func (mdb MongoDBConnection) Save(ch Character) {
+func (mdb MongoDBConnection) Save(ch *Character) {
 	c := mdb.session.DB("adventure").C("characters")
-	err := c.Insert(&ch)
+	err := c.Insert(ch)
 	if err != nil {
 		panic(err)
 	}
@@ -29,4 +29,17 @@ func (mdb MongoDBConnection) Load(ID string) (result Character) {
 		panic(err)
 	}
 	return
+}
+
+//GetSession return a new session if there is no previous one
+func (mdb *MongoDBConnection) GetSession() *mgo.Session {
+	if mdb.session != nil {
+		return mdb.session.Copy()
+	}
+	session, err := mgo.Dial("localhost")
+	if err != nil {
+		panic(err)
+	}
+	session.SetMode(mgo.Monotonic, true)
+	return session
 }

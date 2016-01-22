@@ -9,8 +9,6 @@ import (
 	"log"
 	"net/http"
 
-	"gopkg.in/mgo.v2"
-
 	"github.com/gorilla/mux"
 	"github.com/justinas/alice"
 )
@@ -89,23 +87,15 @@ func create(w http.ResponseWriter, r *http.Request) {
 	ch.CharacterID = fmt.Sprintf("%x", checkSum)
 	log.Printf("Created character sha hash: %v", ch.CharacterID)
 
-	session, err := mgo.Dial("localhost")
-	if err != nil {
-		panic(err)
+	char := &Character{
+		ID:   ch.CharacterID,
+		Name: newName.Name,
 	}
-	defer session.Close()
-
-	//TODO:Replace this with reflection based on configuration
-	mdb := MongoDBConnection{}
-	mdb.session = session
-
-	// var mongoChar = struct {
-	//
-	// }
-
-	char := Character{id: ch.CharacterID, name: newName.Name}
 
 	log.Println("Saving character:", char)
+	mdb := &MongoDBConnection{}
+	mdb.session = mdb.GetSession()
+	defer mdb.session.Close()
 	mdb.Save(char)
 
 	w.Header().Set("Content-Type", "application/json")
@@ -119,18 +109,13 @@ func loadCharacter(w http.ResponseWriter, r *http.Request) {
 	charID := vars["ID"]
 	var resultCharacter Character
 	log.Println("Looking for character with ID:", charID)
-	//TODO: I need to abstract this out more into a global variable which is a Storage
-	//that has a connection setup in the init()
-	session, err := mgo.Dial("localhost")
-	if err != nil {
-		panic(err)
-	}
-	defer session.Close()
+
 	// config := getConfiguration()
 	// storage := getStorage(config.Storage)
 	//TODO:Replace this with reflection based on configuration
-	mdb := MongoDBConnection{}
-	mdb.session = session
+	mdb := &MongoDBConnection{}
+	mdb.session = mdb.GetSession()
+	defer mdb.session.Close()
 	resultCharacter = mdb.Load(charID)
 
 	w.Header().Set("Content-Type", "application/json")
@@ -138,15 +123,6 @@ func loadCharacter(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusFound)
 	json.NewEncoder(w).Encode(resultCharacter)
 }
-
-//getStorage will be replaced by some kind of reflection mechanism
-// func getStorage(storage string) (st Storage) {
-// 	switch storage {
-// 	case "MongoDBConnection":
-// 		st = MongoDBConnection{}
-// 	}
-// 	return
-// }
 
 func handleError(w http.ResponseWriter, s string) {
 	w.Header().Set("Content-Type", "application/json")
