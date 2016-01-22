@@ -1,10 +1,8 @@
 package main
 
 import (
-	"crypto/sha1"
 	"encoding/json"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -47,8 +45,8 @@ func main() {
 	router.Handle(APIBASE+"/", handlerChain.ThenFunc(index)).Methods("GET")
 	router.Handle(APIBASE+"/create", handlerChain.ThenFunc(create)).Methods("POST")
 	router.Handle(APIBASE+"/load/{ID}", handlerChain.ThenFunc(loadCharacter)).Methods("GET")
-	router.Handle(APIBASE+"/start", handlerChain.ThenFunc(StartAdventure)).Methods("POST")
-	router.Handle(APIBASE+"/stop", handlerChain.ThenFunc(StopAdventure)).Methods("POST")
+	router.Handle(APIBASE+"/start", handlerChain.ThenFunc(startAdventure)).Methods("POST")
+	router.Handle(APIBASE+"/stop", handlerChain.ThenFunc(stopAdventure)).Methods("POST")
 	log.Printf("Starting server to listen on port: 8989...")
 	log.Fatal(http.ListenAndServe(":8989", router))
 }
@@ -62,71 +60,9 @@ func index(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(m)
 }
 
-//create handling the creation of a new character
-//curl -H "Content-Type: application/json" -X POST -d '{"name":"asdf"}' http://localhost:8989
-func create(w http.ResponseWriter, r *http.Request) {
-	var newName struct {
-		Name string `json:"name"`
-	}
-	ch := NewCharacter{}
-	body, err := ioutil.ReadAll(io.LimitReader(r.Body, READLIMIT))
-	if err != nil {
-		handleError(w, "Error occured while reading the body:")
-		return
-	}
-	if err := r.Body.Close(); err != nil {
-		handleError(w, fmt.Sprintf("Error occured while closing the body: %v", err))
-		return
-	}
-	if err := json.Unmarshal(body, &newName); err != nil {
-		handleError(w, fmt.Sprintf("Error occured while formatting request: %v", err))
-		return
-	}
-
-	checkSum := sha1.Sum([]byte(newName.Name))
-	ch.CharacterID = fmt.Sprintf("%x", checkSum)
-	log.Printf("Created character sha hash: %v", ch.CharacterID)
-
-	char := &Character{
-		ID:   ch.CharacterID,
-		Name: newName.Name,
-	}
-
-	log.Println("Saving character:", char)
-	mdb := &MongoDBConnection{}
-	mdb.session = mdb.GetSession()
-	defer mdb.session.Close()
-	mdb.Save(char)
-
+func handleError(w http.ResponseWriter, s string, status int) {
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(ch)
-}
-
-func loadCharacter(w http.ResponseWriter, r *http.Request) {
-
-	vars := mux.Vars(r)
-	charID := vars["ID"]
-	var resultCharacter Character
-	log.Println("Looking for character with ID:", charID)
-
-	// config := getConfiguration()
-	// storage := getStorage(config.Storage)
-	//TODO:Replace this with reflection based on configuration
-	mdb := &MongoDBConnection{}
-	mdb.session = mdb.GetSession()
-	defer mdb.session.Close()
-	resultCharacter = mdb.Load(charID)
-
-	w.Header().Set("Content-Type", "application/json")
-	//Not handling error cases yet when the Character could not be retrieved
-	w.WriteHeader(http.StatusFound)
-	json.NewEncoder(w).Encode(resultCharacter)
-}
-
-func handleError(w http.ResponseWriter, s string) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(500) // unprocessable entity
+	w.WriteHeader(status) // unprocessable entity
 	errorResponse := ErrorResponse{}
 	errorResponse.ErrorMessage = fmt.Sprintf(s)
 	json.NewEncoder(w).Encode(errorResponse)

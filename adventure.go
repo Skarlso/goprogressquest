@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"time"
 )
@@ -9,35 +10,61 @@ import (
 var adventureSignal = make(chan bool)
 
 //StartAdventure starts and adventure in an endless for loop, until a channel signals otherwise
-func StartAdventure(w http.ResponseWriter, r *http.Request) {
+func startAdventure(w http.ResponseWriter, r *http.Request) {
 	//First, make it work.
 	//second, make it right.
 	//Third, make it fast.
+	var adventurer struct {
+		Name string `json:"name"`
+	}
+
+	defer r.Body.Close()
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&adventurer)
+
+	if err != nil {
+		handleError(w, "Error occured while reading Json."+err.Error(), http.StatusBadRequest)
+	}
+
 	m := Message{}
-	m.Message = "Started adventuring"
+	m.Message = "Started adventuring for character: " + adventurer.Name
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(m)
 	go func() {
+		// w.Header().Set("Content-Type", "application/json")
+		// w.WriteHeader(http.StatusOK)
+	loop:
 		for {
-			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(http.StatusOK)
-			json.NewEncoder(w).Encode(m)
-			if <-adventureSignal {
-				m = Message{}
-				m.Message = "Stopped adventuring"
-				json.NewEncoder(w).Encode(m)
-				break
+			select {
+			case <-adventureSignal:
+				break loop // or use return...
+			default:
+				log.Println("Adventuring...")
+				time.Sleep(time.Millisecond * 500)
 			}
-			time.Sleep(time.Millisecond * 500)
 		}
 	}()
 }
 
 //StopAdventure Stop adventuring
-func StopAdventure(w http.ResponseWriter, r *http.Request) {
+func stopAdventure(w http.ResponseWriter, r *http.Request) {
 	//signal channel to stop fight.
+	var adventurer struct {
+		Name string `json:"name"`
+	}
+
+	defer r.Body.Close()
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&adventurer)
+
+	if err != nil {
+		handleError(w, "Error occured while reading Json."+err.Error(), http.StatusBadRequest)
+	}
 	adventureSignal <- true
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	m := Message{}
-	m.Message = "Stop adventuring signalled."
+	m.Message = "Stop adventuring signalled for adventurer:" + adventurer.Name
 	json.NewEncoder(w).Encode(m)
 }
