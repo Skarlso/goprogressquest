@@ -34,11 +34,11 @@ func startAdventure(w http.ResponseWriter, r *http.Request) {
 	go func() {
 		// w.Header().Set("Content-Type", "application/json")
 		// w.WriteHeader(http.StatusOK)
-	loop:
 		for {
 			select {
 			case <-adventureSignal:
-				break loop // or use return...
+				log.Println("Stopping adventuring...")
+				return
 			default:
 				log.Println("Adventuring...")
 				time.Sleep(time.Millisecond * 500)
@@ -62,6 +62,10 @@ func stopAdventure(w http.ResponseWriter, r *http.Request) {
 		handleError(w, "Error occured while reading Json."+err.Error(), http.StatusBadRequest)
 	}
 	adventureSignal <- true
+	// select {
+	// case adventureSignal <- true:
+	// default:
+	// }
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	m := Message{}
