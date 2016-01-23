@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-var adventureSignal = make(chan bool)
+var adventureSignal = make(chan bool, 1)
 
 //StartAdventure starts and adventure in an endless for loop, until a channel signals otherwise
 func startAdventure(w http.ResponseWriter, r *http.Request) {
@@ -32,17 +32,20 @@ func startAdventure(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(m)
 	go func(name string) {
-		// w.Header().Set("Content-Type", "application/json")
-		// w.WriteHeader(http.StatusOK)
+		stop := false
 		for {
 			select {
-			case <-adventureSignal:
-				log.Println("Stopping adventuring for:", name)
-				return
+			case stop = <-adventureSignal:
 			default:
-				log.Println("Adventuring...")
-				time.Sleep(time.Millisecond * 500)
 			}
+
+			if stop {
+				log.Println("Stopping adventuring for:", name)
+				break
+			}
+
+			log.Println("Adventuring...")
+			time.Sleep(time.Millisecond * 500)
 		}
 	}(adventurer.Name)
 }
@@ -61,11 +64,12 @@ func stopAdventure(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		handleError(w, "Error occured while reading Json."+err.Error(), http.StatusBadRequest)
 	}
-	adventureSignal <- true
-	// select {
-	// case adventureSignal <- true:
-	// default:
-	// }
+
+	select {
+	case adventureSignal <- true:
+	default:
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	m := Message{}
