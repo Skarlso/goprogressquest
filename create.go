@@ -23,6 +23,7 @@ func create(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		handleError(w, "Error occured while reading Json."+err.Error(), http.StatusBadRequest)
+		return
 	}
 
 	checkSum := sha1.Sum([]byte(newName.Name))
@@ -38,8 +39,11 @@ func create(w http.ResponseWriter, r *http.Request) {
 	mdb := &MongoDBConnection{}
 	mdb.session = mdb.GetSession()
 	defer mdb.session.Close()
-	mdb.Save(char)
-
+	err = mdb.Save(char)
+	if err != nil {
+		handleError(w, "Error occured while saving character."+err.Error(), http.StatusBadRequest)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(ch)
@@ -58,7 +62,11 @@ func loadCharacter(w http.ResponseWriter, r *http.Request) {
 	mdb := &MongoDBConnection{}
 	mdb.session = mdb.GetSession()
 	defer mdb.session.Close()
-	resultCharacter = mdb.Load(charID)
+	resultCharacter, err := mdb.Load(charID)
+	if err != nil {
+		handleError(w, "Error occured while loading character:"+err.Error(), http.StatusBadRequest)
+		return
+	}
 
 	w.Header().Set("Content-Type", "application/json")
 	//Not handling error cases yet when the Character could not be retrieved
