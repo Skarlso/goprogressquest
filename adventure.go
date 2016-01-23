@@ -10,6 +10,7 @@ import (
 var adventureSignal = make(chan bool, 1)
 
 //TODO: For now, adventuring is saved to a map based on an ID
+var adventurersOnQuest = make(map[string]bool, 0)
 
 //StartAdventure starts and adventure in an endless for loop, until a channel signals otherwise
 func startAdventure(w http.ResponseWriter, r *http.Request) {
@@ -30,9 +31,15 @@ func startAdventure(w http.ResponseWriter, r *http.Request) {
 
 	mdb := MongoDBConnection{}
 	mdb.session = mdb.GetSession()
+	defer mdb.session.Close()
 	char, err := mdb.Load(adventurer.ID)
 	if err != nil {
 		handleError(w, "Error occured while loading character:"+err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if adventurersOnQuest[char.ID] {
+		handleError(w, "Error occured, adventurer is already adventuring!", http.StatusBadRequest)
 		return
 	}
 
@@ -41,8 +48,9 @@ func startAdventure(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(m)
-	//TODO: Next: A way to detect that an adventurer is adventuring.
-	go func(name string) {
+
+	go func(id string, name string) {
+		adventurersOnQuest[id] = true
 		stop := false
 		for {
 			select {
@@ -52,13 +60,14 @@ func startAdventure(w http.ResponseWriter, r *http.Request) {
 
 			if stop {
 				log.Println("Stopping adventuring for:", name)
+				adventurersOnQuest[id] = false
 				break
 			}
 
 			log.Println("Adventuring...")
 			time.Sleep(time.Millisecond * 500)
 		}
-	}(char.Name)
+	}(char.ID, char.Name)
 }
 
 //StopAdventure Stop adventuring
@@ -78,12 +87,19 @@ func stopAdventure(w http.ResponseWriter, r *http.Request) {
 
 	mdb := MongoDBConnection{}
 	mdb.session = mdb.GetSession()
+	defer mdb.session.Close()
 	char, err := mdb.Load(adventurer.ID)
 	if err != nil {
 		handleError(w, "Error occured while loading character:"+err.Error(), http.StatusBadRequest)
 		return
 	}
+	log.Println("Loaded adventurer:", char)
+	log.Println("Adventurer is on questing?", adventurersOnQuest[char.ID])
 
+	if !adventurersOnQuest[char.ID] {
+		handleError(w, "Error occured, adventurer is not adventuring!", http.StatusBadRequest)
+		return
+	}
 	select {
 	case adventureSignal <- true:
 	default:
