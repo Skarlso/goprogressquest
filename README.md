@@ -12,6 +12,9 @@ API Version is 1
 
 The following end-points are available:
 
+Creational
+----------
+
 ```
 /
 ```
@@ -22,29 +25,79 @@ Currently returns:
 }
 ```
 
-
 ```bash
 # Character names don't have to be unique
-/register
+/create
 ```
 ```json
 POST:
 {
-    "character":{
-        "name":"MyAwesomeCharacterName"
-    }
+    "name":"MyAwesomeCharacterName"
 }
 ```
-Return: (Something like this)
+Return:
 ```json
 {
-    "characterId":"103b922810b1fac97da1bad872618477"
+    "id":"103b922810b1fac97da1bad872618477"
+}
+```
+
+```bash
+# Load a character by ID since names are not unique at the moment
+/load/{ID}
+/load/3da541559918a808c2402bba5012f6c60b27661c
+```
+
+Return:
+```json
+{
+    "Inventory":{"Items":[]},"Name":"MyAwesomeCharacterName","Stats":{"Str":0,"Agi":0,"In":0,"Per":0,"Chr":0,"Lck":0},"ID":"3da541559918a808c2402bba5012f6c60b27661c","Gold":0
+}
+```
+
+Adventuring related
+-------------------
+
+```bash
+# Start adventuring
+/start
+```
+
+```json
+POST:
+{
+    "name":"MyAwesomeCharacterName"
+}
+```
+Return:
+```json
+{
+    "message":"Started adventuring for character: MyAwesomeCharacterName"
+}
+```
+
+```bash
+# Stop adventuring
+/stop
+```
+```json
+POST:
+{
+    "name":"MyAwesomeCharacterName"
+}
+```
+Return:
+```json
+{
+    "message":"Stopped adventuring for character: MyAwesomeCharacterName"
 }
 ```
 
 Running it
 ----------
 
-To run it, you have to install the app by typeing ```go install``` from the main directory. The switch to your go installation's bin directory and run the created goprogressquest file. That should start the server. If you are developing and don't want to swith around, ```go run``` needs all the files as parameter.
+```bash
+go build
+```
 
-```go run gorpgapi.go middleware.go response_types.go```
+Currently the project is simple enough so that no Makefile is needed for this process.

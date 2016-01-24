@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -62,8 +61,8 @@ func index(w http.ResponseWriter, r *http.Request) {
 
 func handleError(w http.ResponseWriter, s string, status int) {
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(status) // unprocessable entity
+	w.WriteHeader(status)
 	errorResponse := ErrorResponse{}
-	errorResponse.ErrorMessage = fmt.Sprintf(s)
+	errorResponse.ErrorMessage = s
 	json.NewEncoder(w).Encode(errorResponse)
 }

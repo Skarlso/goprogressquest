@@ -93,6 +93,7 @@ func stopAdventure(w http.ResponseWriter, r *http.Request) {
 		handleError(w, "Error occured while loading character:"+err.Error(), http.StatusBadRequest)
 		return
 	}
+
 	log.Println("Loaded adventurer:", char)
 	log.Println("Adventurer is on questing?", adventurersOnQuest[char.ID])
 

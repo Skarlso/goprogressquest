@@ -69,7 +69,6 @@ func loadCharacter(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	//Not handling error cases yet when the Character could not be retrieved
 	w.WriteHeader(http.StatusFound)
 	json.NewEncoder(w).Encode(resultCharacter)
 }
