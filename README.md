@@ -1,5 +1,8 @@
 Go Progress Quest
 =================
+
+[![Build Status](https://travis-ci.org/Skarlso/goprogressquest.svg?branch=master)](https://travis-ci.org/Skarlso/goprogressquest)
+
 This will be a Go Implementation of the famous type of RPG, called:
 https://en.wikipedia.org/wiki/Progress_Quest
 
