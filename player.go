@@ -15,19 +15,33 @@ type Inventory struct {
 
 //Stats contains a groupped information about stats of a character
 type Stats struct {
-	Str int
-	Agi int
-	In  int
-	Per int
-	Chr int
-	Lck int
+	Strenght     int
+	Agility      int
+	Intelligence int
+	Perception   int
+	Luck         int
+}
+
+//Cast the cast of a player, like mage, rouge, warrior...
+type Cast struct {
+	name string
+	id   int
+}
+
+//Race the race of the player, like elf, gnome, human, dwarf...
+type Race struct {
+	name string
+	id   int
 }
 
 //Character is a player character
 type Character struct {
-	Inventory Inventory
-	Name      string ``
-	Stats     Stats
 	ID        string
+	Inventory Inventory
+	Name      string
+	Stats     Stats
 	Gold      int
+	Level     int
+	Race      int
+	Cast      int
 }
