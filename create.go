@@ -2,27 +2,23 @@ package main
 
 import (
 	"crypto/sha1"
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 )
 
 //create handling the creation of a new character
 //curl -H "Content-Type: application/json" -X POST -d '{"name":"asdf"}' http://localhost:8989
-func create(w http.ResponseWriter, r *http.Request) {
+func create(c *gin.Context) {
 	var newName struct {
 		Name string `json:"name"`
 	}
 	ch := NewCharacter{}
-	defer r.Body.Close()
-	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&newName)
 
-	if err != nil {
-		handleError(w, "Error occured while reading Json."+err.Error(), http.StatusBadRequest)
+	if err := c.BindJSON(&newName); err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{"error while binding newName:" + err.Error()})
 		return
 	}
 
@@ -39,20 +35,17 @@ func create(w http.ResponseWriter, r *http.Request) {
 	mdb := &MongoDBConnection{}
 	mdb.session = mdb.GetSession()
 	defer mdb.session.Close()
-	err = mdb.Save(char)
+	err := mdb.Save(char)
 	if err != nil {
-		handleError(w, "Error occured while saving character."+err.Error(), http.StatusBadRequest)
+		c.JSON(http.StatusBadRequest, ErrorResponse{"error while saving character:" + err.Error()})
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(ch)
+	c.JSON(http.StatusCreated, char)
 }
 
-func loadCharacter(w http.ResponseWriter, r *http.Request) {
+func loadCharacter(c *gin.Context) {
 
-	vars := mux.Vars(r)
-	charID := vars["ID"]
+	charID := c.Params.ByName("ID")
 	var resultCharacter Character
 	log.Println("Looking for character with ID:", charID)
 
@@ -64,11 +57,9 @@ func loadCharacter(w http.ResponseWriter, r *http.Request) {
 	defer mdb.session.Close()
 	resultCharacter, err := mdb.Load(charID)
 	if err != nil {
-		handleError(w, "Error occured while loading character:"+err.Error(), http.StatusBadRequest)
+		c.JSON(http.StatusBadRequest, ErrorResponse{"Error occured while loading character:" + err.Error()})
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusFound)
-	json.NewEncoder(w).Encode(resultCharacter)
+	c.JSON(http.StatusOK, resultCharacter)
 }

@@ -1,10 +1,11 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 var adventureSignal = make(chan bool, 1)
@@ -13,7 +14,7 @@ var adventureSignal = make(chan bool, 1)
 var adventurersOnQuest = make(map[string]bool, 0)
 
 //StartAdventure starts and adventure in an endless for loop, until a channel signals otherwise
-func startAdventure(w http.ResponseWriter, r *http.Request) {
+func startAdventure(c *gin.Context) {
 	//First, make it work.
 	//second, make it right.
 	//Third, make it fast.
@@ -21,11 +22,8 @@ func startAdventure(w http.ResponseWriter, r *http.Request) {
 		ID string `json:"id"`
 	}
 
-	defer r.Body.Close()
-	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&adventurer)
-	if err != nil {
-		handleError(w, "Error occured while reading Json."+err.Error(), http.StatusBadRequest)
+	if err := c.BindJSON(&adventurer); err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{"error while binding adventurer:" + err.Error()})
 		return
 	}
 
@@ -34,20 +32,18 @@ func startAdventure(w http.ResponseWriter, r *http.Request) {
 	defer mdb.session.Close()
 	char, err := mdb.Load(adventurer.ID)
 	if err != nil {
-		handleError(w, "Error occured while loading character:"+err.Error(), http.StatusBadRequest)
+		c.JSON(http.StatusBadRequest, ErrorResponse{"Error occured while loading character:" + err.Error()})
 		return
 	}
 
 	if adventurersOnQuest[char.ID] {
-		handleError(w, "Error occured, adventurer is already adventuring!", http.StatusBadRequest)
+		c.JSON(http.StatusBadRequest, ErrorResponse{"Error occured, adventurer is already adventuring!"})
 		return
 	}
 
 	m := Message{}
 	m.Message = "Started adventuring for character: " + char.Name
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(m)
+	c.JSON(http.StatusOK, m)
 
 	go func(id string, name string) {
 		adventurersOnQuest[id] = true
@@ -71,17 +67,14 @@ func startAdventure(w http.ResponseWriter, r *http.Request) {
 }
 
 //StopAdventure Stop adventuring
-func stopAdventure(w http.ResponseWriter, r *http.Request) {
+func stopAdventure(c *gin.Context) {
 	//signal channel to stop fight.
 	var adventurer struct {
 		ID string `json:"id"`
 	}
 
-	defer r.Body.Close()
-	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&adventurer)
-	if err != nil {
-		handleError(w, "Error occured while reading Json."+err.Error(), http.StatusBadRequest)
+	if err := c.BindJSON(&adventurer); err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{"error while binding adventurer:" + err.Error()})
 		return
 	}
 
@@ -90,7 +83,7 @@ func stopAdventure(w http.ResponseWriter, r *http.Request) {
 	defer mdb.session.Close()
 	char, err := mdb.Load(adventurer.ID)
 	if err != nil {
-		handleError(w, "Error occured while loading character:"+err.Error(), http.StatusBadRequest)
+		c.JSON(http.StatusBadRequest, ErrorResponse{"Error occured while loading character:" + err.Error()})
 		return
 	}
 
@@ -98,7 +91,7 @@ func stopAdventure(w http.ResponseWriter, r *http.Request) {
 	log.Println("Adventurer is on questing?", adventurersOnQuest[char.ID])
 
 	if !adventurersOnQuest[char.ID] {
-		handleError(w, "Error occured, adventurer is not adventuring!", http.StatusBadRequest)
+		c.JSON(http.StatusBadRequest, ErrorResponse{"Error occured, adventurer is not adventuring!"})
 		return
 	}
 	select {
@@ -106,9 +99,7 @@ func stopAdventure(w http.ResponseWriter, r *http.Request) {
 	default:
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
 	m := Message{}
-	m.Message = "Stop adventuring signalled for adventurer:" + char.Name
-	json.NewEncoder(w).Encode(m)
+	m.Message = "Stop adventuring for character: " + char.Name
+	c.JSON(http.StatusOK, m)
 }
