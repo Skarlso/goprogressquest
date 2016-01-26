@@ -18,13 +18,13 @@ func TestCreateReturnsAnIdAndHash(t *testing.T) {
 
 	mdb = TestDB{}
 	router := gin.New()
-	router.POST("/api/1/create", create)
+	router.POST("/"+APIBASE+"/create", create)
 
 	expectedCharacter := Character{}
 	expectedCharacter.ID = fmt.Sprintf("%x", sha1.Sum([]byte("asdf")))
 	expectedCharacter.Name = "asdf"
 
-	req, _ := http.NewRequest("POST", "/api/1/create", strings.NewReader("{\"name\":\"asdf\"}"))
+	req, _ := http.NewRequest("POST", "/"+APIBASE+"/create", strings.NewReader("{\"name\":\"asdf\"}"))
 	req.Header.Set("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)

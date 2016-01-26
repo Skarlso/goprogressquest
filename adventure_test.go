@@ -13,9 +13,9 @@ import (
 func TestAdventureReturningErrorOnPlayerWhichIsNotCreated(t *testing.T) {
 	mdb = TestDB{}
 	router := gin.New()
-	router.POST("/api/1/start", startAdventure)
+	router.POST("/"+APIBASE+"/start", startAdventure)
 
-	req, _ := http.NewRequest("POST", "/api/1/start", strings.NewReader("{\"id\":\"not_found\"}"))
+	req, _ := http.NewRequest("POST", "/"+APIBASE+"/start", strings.NewReader("{\"id\":\"not_found\"}"))
 	req.Header.Add("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
@@ -27,9 +27,9 @@ func TestStartingAdventuringForPlayerWhoIsAdventuring(t *testing.T) {
 	mdb = TestDB{}
 	adventurersOnQuest["onquest"] = true
 	router := gin.New()
-	router.POST("/api/1/start", startAdventure)
+	router.POST("/"+APIBASE+"/start", startAdventure)
 
-	req, _ := http.NewRequest("POST", "/api/1/start", strings.NewReader("{\"id\":\"onquest\"}"))
+	req, _ := http.NewRequest("POST", "/"+APIBASE+"/start", strings.NewReader("{\"id\":\"onquest\"}"))
 	req.Header.Add("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
