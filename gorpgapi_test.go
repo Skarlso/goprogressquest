@@ -20,3 +20,7 @@ func TestIndexReturningWelcomeMessage(t *testing.T) {
 
 	assert.Equal(t, resp.Body.String(), "{\"message\":\"Welcome to my RPG\"}\n")
 }
+
+func TestInvalidAPICallReturnsNotFound(t *testing.T) {
+	t.SkipNow()
+}
