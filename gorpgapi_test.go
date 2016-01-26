@@ -10,10 +10,6 @@ import (
 )
 
 func TestIndexReturningWelcomeMessage(t *testing.T) {
-	// handler := func(c *gin.Context) {
-	// 	c.String(http.StatusOK, "bar")
-	// }
-
 	indexHandler := index
 	router := gin.New()
 	router.GET("/", indexHandler)
@@ -22,5 +18,5 @@ func TestIndexReturningWelcomeMessage(t *testing.T) {
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
 
-	assert.Equal(t, resp.Body.String(), "bar")
+	assert.Equal(t, resp.Body.String(), "{\"message\":\"Welcome to my RPG\"}\n")
 }
