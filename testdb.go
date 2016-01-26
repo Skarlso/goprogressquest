@@ -18,5 +18,5 @@ func (tdb TestDB) Load(ID string) (result Character, err error) {
 	if ID == "not_found" {
 		return Character{}, fmt.Errorf("not found")
 	}
-	return Character{}, nil
+	return Character{ID: ID, Name: ID}, nil
 }

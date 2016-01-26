@@ -22,3 +22,17 @@ func TestAdventureReturningErrorOnPlayerWhichIsNotCreated(t *testing.T) {
 
 	assert.Equal(t, resp.Body.String(), "{\"error\":\"Error occured while loading character:not found\"}\n")
 }
+
+func TestStartingAdventuringForPlayerWhoIsAdventuring(t *testing.T) {
+	mdb = TestDB{}
+	adventurersOnQuest["onquest"] = true
+	router := gin.New()
+	router.POST("/api/1/start", startAdventure)
+
+	req, _ := http.NewRequest("POST", "/api/1/start", strings.NewReader("{\"id\":\"onquest\"}"))
+	req.Header.Add("Content-type", "application/json")
+	resp := httptest.NewRecorder()
+	router.ServeHTTP(resp, req)
+
+	assert.Equal(t, resp.Body.String(), "{\"error\":\"Error occured, adventurer is already adventuring!\"}\n")
+}
