@@ -11,11 +11,11 @@ import (
 )
 
 func TestAdventureReturningErrorOnPlayerWhichIsNotCreated(t *testing.T) {
-	t.SkipNow()
+	mdb = TestDB{}
 	router := gin.New()
 	router.POST("/api/1/start", startAdventure)
 
-	req, _ := http.NewRequest("POST", "/api/1/start", strings.NewReader("{\"name\":\"asdf\"}"))
+	req, _ := http.NewRequest("POST", "/api/1/start", strings.NewReader("{\"id\":\"not_found\"}"))
 	req.Header.Add("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)

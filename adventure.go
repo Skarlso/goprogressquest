@@ -25,8 +25,6 @@ func startAdventure(c *gin.Context) {
 		return
 	}
 
-	mdb = MongoDBConnection{}
-
 	char, err := mdb.Load(adventurer.ID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{"Error occured while loading character:" + err.Error()})
@@ -75,9 +73,6 @@ func stopAdventure(c *gin.Context) {
 		return
 	}
 
-	mdb := MongoDBConnection{}
-	mdb.session = mdb.GetSession()
-	defer mdb.session.Close()
 	char, err := mdb.Load(adventurer.ID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{"Error occured while loading character:" + err.Error()})

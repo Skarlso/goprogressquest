@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 //Starting mongodb -> mongod --config /usr/local/etc/mongod.conf --fork
 
 //TestDB Encapsulates a connection to a database
@@ -13,5 +15,8 @@ func (tdb TestDB) Save(ch Character) error {
 
 //Load will load the player using mongodb as a storage medium
 func (tdb TestDB) Load(ID string) (result Character, err error) {
+	if ID == "not_found" {
+		return Character{}, fmt.Errorf("not found")
+	}
 	return Character{}, nil
 }

@@ -4,6 +4,7 @@ import (
 	"crypto/sha1"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -14,8 +15,8 @@ import (
 )
 
 func TestCreateReturnsAnIdAndHash(t *testing.T) {
-	//TODO: Need to make it so that it doesn't depend on MongoDB
-	t.SkipNow()
+
+	mdb = TestDB{}
 	router := gin.New()
 	router.POST("/api/1/create", create)
 
@@ -29,9 +30,9 @@ func TestCreateReturnsAnIdAndHash(t *testing.T) {
 	router.ServeHTTP(resp, req)
 
 	returnCharacter := Character{}
-
 	json.Unmarshal(resp.Body.Bytes(), &returnCharacter)
-
+	log.Println("Expected:", expectedCharacter)
+	log.Println("Actual:", returnCharacter)
 	assert.Equal(t, expectedCharacter, returnCharacter)
 }
 

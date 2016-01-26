@@ -12,6 +12,7 @@ import (
 //create handling the creation of a new character
 //curl -H "Content-Type: application/json" -X POST -d '{"name":"asdf"}' http://localhost:8989
 func create(c *gin.Context) {
+
 	var newName struct {
 		Name string `json:"name"`
 	}
@@ -24,7 +25,6 @@ func create(c *gin.Context) {
 
 	checkSum := sha1.Sum([]byte(newName.Name))
 	ch.CharacterID = fmt.Sprintf("%x", checkSum)
-	log.Printf("Created character sha hash: %v", ch.CharacterID)
 
 	char := Character{
 		ID:   ch.CharacterID,
@@ -32,7 +32,6 @@ func create(c *gin.Context) {
 	}
 
 	log.Println("Saving character:", char)
-	mdb = MongoDBConnection{}
 	err := mdb.Save(char)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{"error while saving character:" + err.Error()})
@@ -50,8 +49,6 @@ func loadCharacter(c *gin.Context) {
 	// config := getConfiguration()
 	// storage := getStorage(config.Storage)
 	//TODO:Replace this with reflection based on configuration
-
-	mdb = MongoDBConnection{}
 
 	resultCharacter, err := mdb.Load(charID)
 	if err != nil {
