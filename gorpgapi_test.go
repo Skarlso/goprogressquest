@@ -10,14 +10,15 @@ import (
 )
 
 func TestIndexReturningWelcomeMessage(t *testing.T) {
-	handler := func(c *gin.Context) {
-		c.String(http.StatusOK, "bar")
-	}
+	// handler := func(c *gin.Context) {
+	// 	c.String(http.StatusOK, "bar")
+	// }
 
+	indexHandler := index
 	router := gin.New()
-	router.GET("/foo", handler)
+	router.GET("/", indexHandler)
 
-	req, _ := http.NewRequest("GET", "/foo", nil)
+	req, _ := http.NewRequest("GET", "/", nil)
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
 
