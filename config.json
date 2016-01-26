@@ -1,3 +1,4 @@
 {
-    "Storage": "MongoDBConnection"
+    "Storage": "mongodb",
+    "DBURL": "localhost"
 }

@@ -1,6 +1,14 @@
 Changes to Go ProgressQuest
 ===========================
 
+v0.1.1
+------
+
+* Starting to abstract out the DB in order to test it better
+* Created a TestDB which will return true values for testing purposes
+* Created a config which will load the appropriate DB
+* Added loading config within init()
+
 
 v0.1.0
 ------

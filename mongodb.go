@@ -13,7 +13,9 @@ type MongoDBConnection struct {
 }
 
 //Save will save a player using mongodb as a storage medium
-func (mdb MongoDBConnection) Save(ch *Character) error {
+func (mdb MongoDBConnection) Save(ch Character) error {
+	mdb.session = mdb.GetSession()
+	defer mdb.session.Close()
 	c := mdb.session.DB("adventure").C("characters")
 	err := c.Insert(ch)
 	return err
@@ -21,6 +23,8 @@ func (mdb MongoDBConnection) Save(ch *Character) error {
 
 //Load will load the player using mongodb as a storage medium
 func (mdb MongoDBConnection) Load(ID string) (result Character, err error) {
+	mdb.session = mdb.GetSession()
+	defer mdb.session.Close()
 	c := mdb.session.DB("adventure").C("characters")
 	err = c.Find(bson.M{"id": ID}).One(&result)
 	return result, err

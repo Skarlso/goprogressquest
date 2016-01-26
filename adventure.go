@@ -15,9 +15,7 @@ var adventurersOnQuest = make(map[string]bool, 0)
 
 //StartAdventure starts and adventure in an endless for loop, until a channel signals otherwise
 func startAdventure(c *gin.Context) {
-	//First, make it work.
-	//second, make it right.
-	//Third, make it fast.
+
 	var adventurer struct {
 		ID string `json:"id"`
 	}
@@ -27,9 +25,8 @@ func startAdventure(c *gin.Context) {
 		return
 	}
 
-	mdb := MongoDBConnection{}
-	mdb.session = mdb.GetSession()
-	defer mdb.session.Close()
+	mdb = MongoDBConnection{}
+
 	char, err := mdb.Load(adventurer.ID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{"Error occured while loading character:" + err.Error()})

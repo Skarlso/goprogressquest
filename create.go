@@ -26,15 +26,13 @@ func create(c *gin.Context) {
 	ch.CharacterID = fmt.Sprintf("%x", checkSum)
 	log.Printf("Created character sha hash: %v", ch.CharacterID)
 
-	char := &Character{
+	char := Character{
 		ID:   ch.CharacterID,
 		Name: newName.Name,
 	}
 
 	log.Println("Saving character:", char)
-	mdb := &MongoDBConnection{}
-	mdb.session = mdb.GetSession()
-	defer mdb.session.Close()
+	mdb = MongoDBConnection{}
 	err := mdb.Save(char)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{"error while saving character:" + err.Error()})
@@ -52,9 +50,9 @@ func loadCharacter(c *gin.Context) {
 	// config := getConfiguration()
 	// storage := getStorage(config.Storage)
 	//TODO:Replace this with reflection based on configuration
-	mdb := &MongoDBConnection{}
-	mdb.session = mdb.GetSession()
-	defer mdb.session.Close()
+
+	mdb = MongoDBConnection{}
+
 	resultCharacter, err := mdb.Load(charID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{"Error occured while loading character:" + err.Error()})
