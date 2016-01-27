@@ -1,7 +1,7 @@
 Go Progress Quest
 =================
 
-[![Build Status](https://travis-ci.org/Skarlso/goprogressquest.svg?branch=master)](https://travis-ci.org/Skarlso/goprogressquest)
+[![Build Status](https://travis-ci.org/Skarlso/goprogressquest.svg?branch=master)](https://travis-ci.org/Skarlso/goprogressquest) [![Coverage Status](https://coveralls.io/repos/github/Skarlso/goprogressquest/badge.svg?branch=master)](https://coveralls.io/github/Skarlso/goprogressquest?branch=master)
 
 This will be a Go Implementation of the famous type of RPG, called:
 https://en.wikipedia.org/wiki/Progress_Quest
