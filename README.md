@@ -1,7 +1,8 @@
 Go Progress Quest
 =================
 
-[![Build Status](https://travis-ci.org/Skarlso/goprogressquest.svg?branch=master)](https://travis-ci.org/Skarlso/goprogressquest) [![Coverage Status](https://coveralls.io/repos/github/Skarlso/goprogressquest/badge.svg?branch=master)](https://coveralls.io/github/Skarlso/goprogressquest?branch=master)
+[![Build Status](https://travis-ci.org/Skarlso/goprogressquest.svg?branch=master)](https://travis-ci.org/Skarlso/goprogressquest)
+[![Coverage Status](https://coveralls.io/repos/github/Skarlso/goprogressquest/badge.svg?branch=master)](https://coveralls.io/github/Skarlso/goprogressquest?branch=master)
 
 Coverage Report (Until I get Coveralls working...)
 --------------------------------------------------
