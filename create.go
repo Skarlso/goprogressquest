@@ -42,13 +42,9 @@ func create(c *gin.Context) {
 
 func loadCharacter(c *gin.Context) {
 
-	charID := c.Params.ByName("ID")
+	charID := c.Param("id")
 	var resultCharacter Character
 	log.Println("Looking for character with ID:", charID)
-
-	// config := getConfiguration()
-	// storage := getStorage(config.Storage)
-	//TODO:Replace this with reflection based on configuration
 
 	resultCharacter, err := mdb.Load(charID)
 	if err != nil {

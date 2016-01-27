@@ -65,3 +65,15 @@ func TestMarshallErrorReturnsProperErrorMessage(t *testing.T) {
 	router.ServeHTTP(resp, req)
 	assert.Equal(t, resp.Body.String(), "{\"error\":\"error while binding newName:invalid character 'i' looking for beginning of value\"}\n")
 }
+
+func TestLoadingACharacterWhichWasNotCreated(t *testing.T) {
+	mdb = TestDB{}
+	router := gin.New()
+	router.GET("/"+APIBASE+"/load/:id", loadCharacter)
+
+	req, _ := http.NewRequest("GET", "/"+APIBASE+"/load/not_found", nil)
+	req.Header.Set("Content-type", "application/json")
+	resp := httptest.NewRecorder()
+	router.ServeHTTP(resp, req)
+	assert.Equal(t, resp.Body.String(), "{\"error\":\"Error occured while loading character:not found\"}\n")
+}
