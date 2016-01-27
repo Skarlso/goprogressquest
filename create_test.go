@@ -52,3 +52,16 @@ func TestSavingErrorReturnsProperErrorMessage(t *testing.T) {
 	router.ServeHTTP(resp, req)
 	assert.Equal(t, resp.Body.String(), "{\"error\":\"error while saving character:error\"}\n")
 }
+
+func TestMarshallErrorReturnsProperErrorMessage(t *testing.T) {
+
+	mdb = TestDB{}
+	router := gin.New()
+	router.POST("/"+APIBASE+"/create", create)
+
+	req, _ := http.NewRequest("POST", "/"+APIBASE+"/create", strings.NewReader("invalidJSON"))
+	req.Header.Set("Content-type", "application/json")
+	resp := httptest.NewRecorder()
+	router.ServeHTTP(resp, req)
+	assert.Equal(t, resp.Body.String(), "{\"error\":\"error while binding newName:invalid character 'i' looking for beginning of value\"}\n")
+}
