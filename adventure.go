@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -10,8 +11,14 @@ import (
 
 var adventureSignal = make(chan bool, 1)
 
+//AdventurerOnQuest advneturer On quest with Locking
+type AdventurerOnQuest struct {
+	m map[string]bool
+	sync.RWMutex
+}
+
 //TODO: For now, adventuring is saved to a map based on an ID
-var adventurersOnQuest = make(map[string]bool, 0)
+var adventurersOnQuest = AdventurerOnQuest{m: make(map[string]bool, 0)}
 
 //StartAdventure starts and adventure in an endless for loop, until a channel signals otherwise
 func startAdventure(c *gin.Context) {
@@ -31,7 +38,7 @@ func startAdventure(c *gin.Context) {
 		return
 	}
 
-	if adventurersOnQuest[char.ID] {
+	if adventurersOnQuest.m[char.ID] {
 		c.JSON(http.StatusBadRequest, ErrorResponse{"Error occured, adventurer is already adventuring!"})
 		return
 	}
@@ -44,7 +51,9 @@ func startAdventure(c *gin.Context) {
 }
 
 func adventuring(id string, name string) {
-	adventurersOnQuest[id] = true
+	adventurersOnQuest.RLock()
+	adventurersOnQuest.m[id] = true
+	adventurersOnQuest.RUnlock()
 	stop := false
 	for {
 		select {
@@ -54,7 +63,9 @@ func adventuring(id string, name string) {
 
 		if stop {
 			log.Println("Stopping adventuring for:", name)
-			adventurersOnQuest[id] = false
+			adventurersOnQuest.RLock()
+			adventurersOnQuest.m[id] = false
+			adventurersOnQuest.RUnlock()
 			break
 		}
 
@@ -82,9 +93,8 @@ func stopAdventure(c *gin.Context) {
 	}
 
 	log.Println("Loaded adventurer:", char)
-	log.Println("Adventurer is on questing?", adventurersOnQuest[char.ID])
 
-	if !adventurersOnQuest[char.ID] {
+	if !adventurersOnQuest.m[char.ID] {
 		c.JSON(http.StatusBadRequest, ErrorResponse{"Error occured, adventurer is not adventuring!"})
 		return
 	}

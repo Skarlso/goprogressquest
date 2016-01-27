@@ -18,7 +18,7 @@ func TestIndexReturningWelcomeMessage(t *testing.T) {
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
 
-	assert.Equal(t, resp.Body.String(), "{\"message\":\"Welcome to my RPG\"}\n")
+	assert.Equal(t, "{\"message\":\"Welcome to my RPG\"}\n", resp.Body.String())
 }
 
 func TestInvalidAPICallReturnsNotFound(t *testing.T) {

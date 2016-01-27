@@ -20,12 +20,13 @@ func TestAdventureReturningErrorOnPlayerWhichIsNotCreated(t *testing.T) {
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
 
-	assert.Equal(t, resp.Body.String(), "{\"error\":\"Error occured while loading character:not found\"}\n")
+	assert.Equal(t, "{\"error\":\"Error occured while loading character:not found\"}\n", resp.Body.String())
 }
 
 func TestStartingAdventuringForPlayerWhoIsAdventuring(t *testing.T) {
 	mdb = TestDB{}
-	adventurersOnQuest["onquest"] = true
+	adventurersOnQuest = AdventurerOnQuest{m: make(map[string]bool, 0)}
+	adventurersOnQuest.m["onquest"] = true
 	router := gin.New()
 	router.POST("/"+APIBASE+"/start", startAdventure)
 
@@ -34,7 +35,7 @@ func TestStartingAdventuringForPlayerWhoIsAdventuring(t *testing.T) {
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
 
-	assert.Equal(t, resp.Body.String(), "{\"error\":\"Error occured, adventurer is already adventuring!\"}\n")
+	assert.Equal(t, "{\"error\":\"Error occured, adventurer is already adventuring!\"}\n", resp.Body.String())
 }
 
 func TestErrorWhileBindingAdventurer(t *testing.T) {
@@ -47,7 +48,7 @@ func TestErrorWhileBindingAdventurer(t *testing.T) {
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
 
-	assert.Equal(t, resp.Body.String(), "{\"error\":\"error while binding adventurer:invalid character 'i' looking for beginning of value\"}\n")
+	assert.Equal(t, "{\"error\":\"error while binding adventurer:invalid character 'i' looking for beginning of value\"}\n", resp.Body.String())
 }
 
 func TestStopAdventuringForACharacterWhichIsNotAdventuring(t *testing.T) {
@@ -60,7 +61,7 @@ func TestStopAdventuringForACharacterWhichIsNotAdventuring(t *testing.T) {
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
 
-	assert.Equal(t, resp.Body.String(), "{\"error\":\"Error occured, adventurer is not adventuring!\"}\n")
+	assert.Equal(t, "{\"error\":\"Error occured, adventurer is not adventuring!\"}\n", resp.Body.String())
 }
 
 func TestStopAdventuringInvalidJSON(t *testing.T) {
@@ -73,7 +74,7 @@ func TestStopAdventuringInvalidJSON(t *testing.T) {
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
 
-	assert.Equal(t, resp.Body.String(), "{\"error\":\"error while binding adventurer:invalid character 'i' looking for beginning of value\"}\n")
+	assert.Equal(t, "{\"error\":\"error while binding adventurer:invalid character 'i' looking for beginning of value\"}\n", resp.Body.String())
 }
 
 func TestStartAdventuringForExistingPlayer(t *testing.T) {
@@ -86,29 +87,30 @@ func TestStartAdventuringForExistingPlayer(t *testing.T) {
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
 
-	assert.Equal(t, resp.Body.String(), "{\"message\":\"Started adventuring for character: quester\"}\n")
+	assert.Equal(t, "{\"message\":\"Started adventuring for character: quester\"}\n", resp.Body.String())
 }
 
 func TestStopAdventuringForAdventurerWhoIsAdventuring(t *testing.T) {
-	t.SkipNow()
 	mdb = TestDB{}
 	router := gin.New()
-	router.POST("/"+APIBASE+"/start", startAdventure)
-
-	req, _ := http.NewRequest("POST", "/"+APIBASE+"/start", strings.NewReader("{\"id\":\"quester\"}"))
+	adventurersOnQuest = AdventurerOnQuest{m: make(map[string]bool, 0)}
+	adventurersOnQuest.m["quester"] = true
+	router.POST("/"+APIBASE+"/stop", stopAdventure)
+	req, _ := http.NewRequest("POST", "/"+APIBASE+"/stop", strings.NewReader("{\"id\":\"quester\"}"))
 	req.Header.Add("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
 
-	assert.Equal(t, resp.Body.String(), "{\"message\":\"Started adventuring for character: quester\"}\n")
+	assert.Equal(t, "{\"message\":\"Stop adventuring for character: quester\"}\n", resp.Body.String())
+	//Also assert that our adventureSignal was fired of
+	assert.Equal(t, 1, len(adventureSignal))
+}
 
-	router.POST("/"+APIBASE+"/stop", stopAdventure)
-	// adventurersOnQuest["quester"] = true
-	req, _ = http.NewRequest("POST", "/"+APIBASE+"/stop", strings.NewReader("{\"id\":\"quester\"}"))
-	req.Header.Add("Content-type", "application/json")
-	resp = httptest.NewRecorder()
-	router.ServeHTTP(resp, req)
-
-	assert.Equal(t, resp.Body.String(), "{\"message\":\"Stop adventuring for character: quester\"}\n")
-
+func TestAdventuring(t *testing.T) {
+	t.SkipNow()
+	go adventuring("id", "name")
+	// fmt.Println(adventurersOnQuest)
+	// adv := adventurersOnQuest["id"]
+	adventureSignal <- true
+	// assert.Equal(t, adv, true)
 }
