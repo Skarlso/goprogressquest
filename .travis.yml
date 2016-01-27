@@ -1,8 +1,6 @@
 language: go
 env:
 - GIN_MODE=release
-go:
-  - tip
 before_install:
   - go get github.com/axw/gocov/gocov
   - go get github.com/mattn/goveralls
