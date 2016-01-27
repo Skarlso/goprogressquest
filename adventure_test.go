@@ -75,3 +75,40 @@ func TestStopAdventuringInvalidJSON(t *testing.T) {
 
 	assert.Equal(t, resp.Body.String(), "{\"error\":\"error while binding adventurer:invalid character 'i' looking for beginning of value\"}\n")
 }
+
+func TestStartAdventuringForExistingPlayer(t *testing.T) {
+	mdb = TestDB{}
+	router := gin.New()
+	router.POST("/"+APIBASE+"/start", startAdventure)
+
+	req, _ := http.NewRequest("POST", "/"+APIBASE+"/start", strings.NewReader("{\"id\":\"quester\"}"))
+	req.Header.Add("Content-type", "application/json")
+	resp := httptest.NewRecorder()
+	router.ServeHTTP(resp, req)
+
+	assert.Equal(t, resp.Body.String(), "{\"message\":\"Started adventuring for character: quester\"}\n")
+}
+
+func TestStopAdventuringForAdventurerWhoIsAdventuring(t *testing.T) {
+	t.SkipNow()
+	mdb = TestDB{}
+	router := gin.New()
+	router.POST("/"+APIBASE+"/start", startAdventure)
+
+	req, _ := http.NewRequest("POST", "/"+APIBASE+"/start", strings.NewReader("{\"id\":\"quester\"}"))
+	req.Header.Add("Content-type", "application/json")
+	resp := httptest.NewRecorder()
+	router.ServeHTTP(resp, req)
+
+	assert.Equal(t, resp.Body.String(), "{\"message\":\"Started adventuring for character: quester\"}\n")
+
+	router.POST("/"+APIBASE+"/stop", stopAdventure)
+	// adventurersOnQuest["quester"] = true
+	req, _ = http.NewRequest("POST", "/"+APIBASE+"/stop", strings.NewReader("{\"id\":\"quester\"}"))
+	req.Header.Add("Content-type", "application/json")
+	resp = httptest.NewRecorder()
+	router.ServeHTTP(resp, req)
+
+	assert.Equal(t, resp.Body.String(), "{\"message\":\"Stop adventuring for character: quester\"}\n")
+
+}

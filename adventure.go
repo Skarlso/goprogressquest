@@ -36,29 +36,31 @@ func startAdventure(c *gin.Context) {
 		return
 	}
 
+	go adventuring(char.ID, char.Name)
+
 	m := Message{}
 	m.Message = "Started adventuring for character: " + char.Name
 	c.JSON(http.StatusOK, m)
+}
 
-	go func(id string, name string) {
-		adventurersOnQuest[id] = true
-		stop := false
-		for {
-			select {
-			case stop = <-adventureSignal:
-			default:
-			}
-
-			if stop {
-				log.Println("Stopping adventuring for:", name)
-				adventurersOnQuest[id] = false
-				break
-			}
-
-			log.Println("Adventuring...")
-			time.Sleep(time.Millisecond * 500)
+func adventuring(id string, name string) {
+	adventurersOnQuest[id] = true
+	stop := false
+	for {
+		select {
+		case stop = <-adventureSignal:
+		default:
 		}
-	}(char.ID, char.Name)
+
+		if stop {
+			log.Println("Stopping adventuring for:", name)
+			adventurersOnQuest[id] = false
+			break
+		}
+
+		log.Println("Adventuring...")
+		time.Sleep(time.Millisecond * 500)
+	}
 }
 
 //StopAdventure Stop adventuring
