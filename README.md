@@ -11,10 +11,6 @@ go test -coverprofile=cover.out
 go tool cover -html=cover.out
 ```
 
-Cover report - 27.01.2016
--------------------------
-
-
 
 This will be a Go Implementation of the famous type of RPG, called:
 https://en.wikipedia.org/wiki/Progress_Quest
