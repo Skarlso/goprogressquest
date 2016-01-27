@@ -77,3 +77,24 @@ func TestLoadingACharacterWhichWasNotCreated(t *testing.T) {
 	router.ServeHTTP(resp, req)
 	assert.Equal(t, "{\"error\":\"Error occured while loading character:not found\"}\n", resp.Body.String())
 }
+
+func TestLoadingCharacter(t *testing.T) {
+	mdb = TestDB{}
+	router := gin.New()
+	router.GET("/"+APIBASE+"/load/:id", loadCharacter)
+
+	expectedCharacter := Character{}
+	expectedCharacter.ID = "asdf"
+	expectedCharacter.Name = "asdf"
+
+	req, _ := http.NewRequest("GET", "/"+APIBASE+"/load/asdf", nil)
+	req.Header.Set("Content-type", "application/json")
+	resp := httptest.NewRecorder()
+	router.ServeHTTP(resp, req)
+
+	returnCharacter := Character{}
+	json.Unmarshal(resp.Body.Bytes(), &returnCharacter)
+	log.Println("Expected:", expectedCharacter)
+	log.Println("Actual:", returnCharacter)
+	assert.Equal(t, expectedCharacter, returnCharacter)
+}

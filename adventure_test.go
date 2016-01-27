@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestAdventureReturningErrorOnPlayerWhichIsNotCreated(t *testing.T) {
+func TestAdventureReturningErrorOnPlayerWhichIsNotCreatedOnStart(t *testing.T) {
 	mdb = TestDB{}
 	router := gin.New()
 	router.POST("/"+APIBASE+"/start", startAdventure)
@@ -23,10 +23,25 @@ func TestAdventureReturningErrorOnPlayerWhichIsNotCreated(t *testing.T) {
 	assert.Equal(t, "{\"error\":\"Error occured while loading character:not found\"}\n", resp.Body.String())
 }
 
+func TestAdventureReturningErrorOnPlayerWhichIsNotCreatedOnStop(t *testing.T) {
+	mdb = TestDB{}
+	router := gin.New()
+	router.POST("/"+APIBASE+"/stop", stopAdventure)
+
+	req, _ := http.NewRequest("POST", "/"+APIBASE+"/stop", strings.NewReader("{\"id\":\"not_found\"}"))
+	req.Header.Add("Content-type", "application/json")
+	resp := httptest.NewRecorder()
+	router.ServeHTTP(resp, req)
+
+	assert.Equal(t, "{\"error\":\"Error occured while loading character:not found\"}\n", resp.Body.String())
+}
+
 func TestStartingAdventuringForPlayerWhoIsAdventuring(t *testing.T) {
 	mdb = TestDB{}
 	adventurersOnQuest = AdventurerOnQuest{m: make(map[string]bool, 0)}
+	adventurersOnQuest.RLock()
 	adventurersOnQuest.m["onquest"] = true
+	adventurersOnQuest.RUnlock()
 	router := gin.New()
 	router.POST("/"+APIBASE+"/start", startAdventure)
 
@@ -38,7 +53,7 @@ func TestStartingAdventuringForPlayerWhoIsAdventuring(t *testing.T) {
 	assert.Equal(t, "{\"error\":\"Error occured, adventurer is already adventuring!\"}\n", resp.Body.String())
 }
 
-func TestErrorWhileBindingAdventurer(t *testing.T) {
+func TestErrorWhileBindingAdventurerOnStart(t *testing.T) {
 	mdb = TestDB{}
 	router := gin.New()
 	router.POST("/"+APIBASE+"/start", startAdventure)
@@ -94,7 +109,9 @@ func TestStopAdventuringForAdventurerWhoIsAdventuring(t *testing.T) {
 	mdb = TestDB{}
 	router := gin.New()
 	adventurersOnQuest = AdventurerOnQuest{m: make(map[string]bool, 0)}
+	adventurersOnQuest.RLock()
 	adventurersOnQuest.m["quester"] = true
+	adventurersOnQuest.RUnlock()
 	router.POST("/"+APIBASE+"/stop", stopAdventure)
 	req, _ := http.NewRequest("POST", "/"+APIBASE+"/stop", strings.NewReader("{\"id\":\"quester\"}"))
 	req.Header.Add("Content-type", "application/json")
