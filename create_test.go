@@ -39,3 +39,16 @@ func TestCreateReturnsAnIdAndHash(t *testing.T) {
 func TestCreateSameCharacterTwice(t *testing.T) {
 	t.SkipNow()
 }
+
+func TestSavingErrorReturnsProperErrorMessage(t *testing.T) {
+
+	mdb = TestDB{}
+	router := gin.New()
+	router.POST("/"+APIBASE+"/create", create)
+
+	req, _ := http.NewRequest("POST", "/"+APIBASE+"/create", strings.NewReader("{\"name\":\"save_error\"}"))
+	req.Header.Set("Content-type", "application/json")
+	resp := httptest.NewRecorder()
+	router.ServeHTTP(resp, req)
+	assert.Equal(t, resp.Body.String(), "{\"error\":\"error while saving character:error\"}\n")
+}

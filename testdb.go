@@ -10,6 +10,10 @@ type TestDB struct {
 
 //Save will save a player using mongodb as a storage medium
 func (tdb TestDB) Save(ch Character) error {
+	fmt.Println(ch)
+	if ch.Name == "save_error" {
+		return fmt.Errorf("error")
+	}
 	return nil
 }
 
