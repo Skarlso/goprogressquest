@@ -34,14 +34,14 @@ type Body struct {
 
 //Cast the cast of a player, like mage, rouge, warrior...
 type Cast struct {
-	name string
-	id   int
+	Name string
+	ID   int
 }
 
 //Race the race of the player, like elf, gnome, human, dwarf...
 type Race struct {
-	name string
-	id   int
+	Name string
+	ID   int
 }
 
 //Character is a player character
