@@ -38,7 +38,9 @@ func TestAdventureReturningErrorOnPlayerWhichIsNotCreatedOnStop(t *testing.T) {
 
 func TestStartingAdventuringForPlayerWhoIsAdventuring(t *testing.T) {
 	mdb = TestDB{}
+	adventurersOnQuest.Lock()
 	adventurersOnQuest.m["onquest"] = true
+	adventurersOnQuest.Unlock()
 	router := gin.New()
 	router.POST("/"+APIBASE+"/start", startAdventure)
 
@@ -105,7 +107,9 @@ func TestStartAdventuringForExistingPlayer(t *testing.T) {
 func TestStopAdventuringForAdventurerWhoIsAdventuring(t *testing.T) {
 	mdb = TestDB{}
 	router := gin.New()
+	adventurersOnQuest.Lock()
 	adventurersOnQuest.m["quester"] = true
+	adventurersOnQuest.Unlock()
 	router.POST("/"+APIBASE+"/stop", stopAdventure)
 	req, _ := http.NewRequest("POST", "/"+APIBASE+"/stop", strings.NewReader("{\"id\":\"quester\"}"))
 	req.Header.Add("Content-type", "application/json")

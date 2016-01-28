@@ -38,7 +38,11 @@ func startAdventure(c *gin.Context) {
 		return
 	}
 
-	if adventurersOnQuest.m[char.ID] {
+	adventurersOnQuest.RLock()
+	adv := adventurersOnQuest.m[char.ID]
+	adventurersOnQuest.RUnlock()
+
+	if adv {
 		c.JSON(http.StatusBadRequest, ErrorResponse{"Error occured, adventurer is already adventuring!"})
 		return
 	}
@@ -51,9 +55,9 @@ func startAdventure(c *gin.Context) {
 }
 
 func adventuring(id string, name string) {
-	adventurersOnQuest.RLock()
+	adventurersOnQuest.Lock()
 	adventurersOnQuest.m[id] = true
-	adventurersOnQuest.RUnlock()
+	adventurersOnQuest.Unlock()
 	stop := false
 	for {
 		select {
@@ -63,9 +67,9 @@ func adventuring(id string, name string) {
 
 		if stop {
 			log.Println("Stopping adventuring for:", name)
-			adventurersOnQuest.RLock()
+			adventurersOnQuest.Lock()
 			adventurersOnQuest.m[id] = false
-			adventurersOnQuest.RUnlock()
+			adventurersOnQuest.Unlock()
 			break
 		}
 
@@ -94,7 +98,10 @@ func stopAdventure(c *gin.Context) {
 
 	log.Println("Loaded adventurer:", char)
 
-	if !adventurersOnQuest.m[char.ID] {
+	adventurersOnQuest.RLock()
+	adv := adventurersOnQuest.m[char.ID]
+	adventurersOnQuest.RUnlock()
+	if !adv {
 		c.JSON(http.StatusBadRequest, ErrorResponse{"Error occured, adventurer is not adventuring!"})
 		return
 	}
