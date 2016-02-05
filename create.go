@@ -2,9 +2,13 @@ package main
 
 import (
 	"crypto/sha1"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -56,19 +60,20 @@ func createCharacter(id, name string) Character {
 	ch := Character{
 		ID:   id,
 		Name: name,
-		Race: ELF,
-		Cast: MAGE,
+		Race: 1,
+		Cast: 1,
 		Gold: 0,
 		Inventory: Inventory{
 			Items: []Item{},
 		},
 		Level: 1,
+		//Starts out with everything at 5. Varies randomly later.
 		Stats: Stats{
-			Strenght:     1,
-			Intelligence: 1,
-			Luck:         1,
-			Perception:   1,
-			Agility:      1,
+			Strenght:     5,
+			Intelligence: 5,
+			Luck:         5,
+			Perception:   5,
+			Agility:      5,
 		},
 		Body: Body{
 			LRing:   Item{},
@@ -81,4 +86,33 @@ func createCharacter(id, name string) Character {
 	}
 
 	return ch
+}
+
+func selectRandomRace() int {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	dat, err := ioutil.ReadFile("races.json")
+	if err != nil {
+		panic(err)
+	}
+	races := []Race{}
+	if err = json.Unmarshal(dat, &races); err != nil {
+		panic(err)
+	}
+
+	return races[r.Intn(len(races)-1)].ID
+}
+
+//TODO: There is clearly duplication here... To tired though.
+func selectRandomCast() int {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	dat, err := ioutil.ReadFile("casts.json")
+	if err != nil {
+		panic(err)
+	}
+	casts := []Cast{}
+	if err = json.Unmarshal(dat, &casts); err != nil {
+		panic(err)
+	}
+
+	return casts[r.Intn(len(casts)-1)].ID
 }

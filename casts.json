@@ -1,0 +1,9 @@
+{
+    "casts": [{
+        "name": "warrior",
+        "id": 1
+    },{
+        "name": "mage",
+        "id": 2
+    }]
+}

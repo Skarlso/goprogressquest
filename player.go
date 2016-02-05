@@ -1,19 +1,21 @@
 package main
 
-//Item a representation of an Item and it's properties
+// Item a representation of an Item and it's properties.
 type Item struct {
 	Name   string
+	ID     string
 	Dmg    int
-	Size   int
 	Weight int
+	Armor  int
+	Value  int
 }
 
-//Inventory holds an endless number of Items
+// Inventory holds an endless number of Items
 type Inventory struct {
 	Items []Item
 }
 
-//Stats contains a groupped information about stats of a character
+// Stats contains a groupped information about stats of a character
 type Stats struct {
 	Strenght     int
 	Agility      int
@@ -22,7 +24,8 @@ type Stats struct {
 	Luck         int
 }
 
-//Body Represents a body of a Player which defines what he wears
+// Body Represents a body of a Player which defines what he wears,
+// Player will always automatically wear the best gear.
 type Body struct {
 	LRing   Item
 	RRing   Item
@@ -32,19 +35,19 @@ type Body struct {
 	Shield  Item
 }
 
-//Cast the cast of a player, like mage, rouge, warrior...
+// Cast the cast of a player, like mage, rouge, warrior...
 type Cast struct {
-	Name string
-	ID   int
+	Name string `json:"name"`
+	ID   int    `json:"id"`
 }
 
-//Race the race of the player, like elf, gnome, human, dwarf...
+// Race the race of the player, like elf, gnome, human, dwarf...
 type Race struct {
-	Name string
-	ID   int
+	Name string `json:"name"`
+	ID   int    `json:"id"`
 }
 
-//Character is a player character
+// Character is a player character.
 type Character struct {
 	ID        string
 	Inventory Inventory

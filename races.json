@@ -1,0 +1,9 @@
+{
+    "races": [{
+        "name": "elf",
+        "id": 1
+    },{
+        "name": "human",
+        "id": 2        
+    }]
+}

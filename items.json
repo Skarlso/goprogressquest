@@ -1,0 +1,10 @@
+{
+	"items": [{
+		"name": "Vengence",
+		"id": "10",
+		"dmg": 10,
+		"weight": 4,
+		"armor": 0,
+		"value": 10
+	}]
+}

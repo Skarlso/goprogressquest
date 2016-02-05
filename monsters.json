@@ -1,0 +1,34 @@
+{
+	"monsters": [{
+		"name": "Barbra Streisand",
+		"id": "1",
+		"race": 1,
+		"case": 1,
+		"items": [{
+			"id": "1"
+		}],
+		"gold": 1,
+		"rare": 10
+	}, {
+		"name": "Raging Hamster",
+		"id": "2",
+		"race": 8,
+		"case": 16,
+		"items": [{
+			"id": "10"
+		}],
+		"gold": 100000000,
+		"rare": 1
+	}, {
+		"name": "Paranoid Dionarap",
+		"id": "3",
+		"race": 2,
+		"case": 32,
+		"items": [{
+			"id": "5",
+            "id": "4"
+		}],
+		"gold": 6,
+		"rare": 5
+	}]
+}
