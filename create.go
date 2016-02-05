@@ -26,10 +26,7 @@ func create(c *gin.Context) {
 	checkSum := sha1.Sum([]byte(newName.Name))
 	ch.CharacterID = fmt.Sprintf("%x", checkSum)
 
-	char := Character{
-		ID:   ch.CharacterID,
-		Name: newName.Name,
-	}
+	char := createCharacter(ch.CharacterID, newName.Name)
 
 	log.Println("Saving character:", char)
 	err := mdb.Save(char)
@@ -53,4 +50,35 @@ func loadCharacter(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, resultCharacter)
+}
+
+func createCharacter(id, name string) Character {
+	ch := Character{
+		ID:   id,
+		Name: name,
+		Race: ELF,
+		Cast: MAGE,
+		Gold: 0,
+		Inventory: Inventory{
+			Items: []Item{},
+		},
+		Level: 1,
+		Stats: Stats{
+			Strenght:     1,
+			Intelligence: 1,
+			Luck:         1,
+			Perception:   1,
+			Agility:      1,
+		},
+		Body: Body{
+			LRing:   Item{},
+			RRing:   Item{},
+			Armor:   Item{},
+			Head:    Item{},
+			Weapond: Item{},
+			Shield:  Item{},
+		},
+	}
+
+	return ch
 }

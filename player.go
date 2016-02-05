@@ -48,6 +48,7 @@ type Race struct {
 type Character struct {
 	ID        string
 	Inventory Inventory
+	Body      Body
 	Name      string
 	Stats     Stats
 	Gold      int

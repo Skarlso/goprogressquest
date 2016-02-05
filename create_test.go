@@ -33,7 +33,8 @@ func TestCreateReturnsAnIdAndHash(t *testing.T) {
 	json.Unmarshal(resp.Body.Bytes(), &returnCharacter)
 	log.Println("Expected:", expectedCharacter)
 	log.Println("Actual:", returnCharacter)
-	assert.Equal(t, expectedCharacter, returnCharacter)
+	assert.Equal(t, expectedCharacter.ID, returnCharacter.ID)
+	assert.Equal(t, expectedCharacter.Name, returnCharacter.Name)
 }
 
 func TestCreateSameCharacterTwice(t *testing.T) {

@@ -9,6 +9,23 @@ const (
 	NEUTRAL
 )
 
+const (
+	ELF = 1 << iota
+	HUMAN
+	DWARF
+	FAIRY
+	HOBBIT
+)
+
+const (
+	WARRIOR = 1 << iota
+	MAGE
+	ROUGE
+	BLACKSMITH
+	WINDRUNNER
+	CABLEGUY
+)
+
 //EventType Type of an Event
 type EventType struct {
 }
