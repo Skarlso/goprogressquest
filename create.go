@@ -13,8 +13,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//create handling the creation of a new character
-//curl -H "Content-Type: application/json" -X POST -d '{"name":"asdf"}' http://localhost:8989
+// Races is an acumulater for races defined in races.json.
+type Races struct {
+	Races []Race `json:"races"`
+}
+
+// Casts is an acumulater for casts in casts.json.
+type Casts struct {
+	Casts []Cast `json:"casts"`
+}
+
+// create handling the creation of a new character
+// curl -H "Content-Type: application/json" -X POST -d '{"name":"asdf"}' http://localhost:8989
 func create(c *gin.Context) {
 
 	var newName struct {
@@ -60,8 +70,8 @@ func createCharacter(id, name string) Character {
 	ch := Character{
 		ID:   id,
 		Name: name,
-		Race: 1,
-		Cast: 1,
+		Race: selectRandomRace(),
+		Cast: selectRandomCast(),
 		Gold: 0,
 		Inventory: Inventory{
 			Items: []Item{},
@@ -94,25 +104,25 @@ func selectRandomRace() int {
 	if err != nil {
 		panic(err)
 	}
-	races := []Race{}
+	races := Races{}
 	if err = json.Unmarshal(dat, &races); err != nil {
 		panic(err)
 	}
 
-	return races[r.Intn(len(races)-1)].ID
+	return races.Races[r.Intn(len(races.Races)-1)].ID
 }
 
-//TODO: There is clearly duplication here... To tired though.
+//TODO: There is clearly duplication here...
 func selectRandomCast() int {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	dat, err := ioutil.ReadFile("casts.json")
 	if err != nil {
 		panic(err)
 	}
-	casts := []Cast{}
+	casts := Casts{}
 	if err = json.Unmarshal(dat, &casts); err != nil {
 		panic(err)
 	}
 
-	return casts[r.Intn(len(casts)-1)].ID
+	return casts.Casts[r.Intn(len(casts.Casts)-1)].ID
 }
