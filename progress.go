@@ -10,7 +10,12 @@ const PointsPerLevel = 15
 
 // LevelUp Level up a character.
 func (c *Character) LevelUp() {
-
+	stats := distributePoints()
+	c.Stats.Agility += stats[0]
+	c.Stats.Intelligence += stats[1]
+	c.Stats.Luck += stats[2]
+	c.Stats.Perception += stats[3]
+	c.Stats.Strenght += stats[4]
 }
 
 func distributePoints() []int {
