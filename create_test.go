@@ -99,3 +99,15 @@ func TestLoadingCharacter(t *testing.T) {
 	log.Println("Actual:", returnCharacter)
 	assert.Equal(t, expectedCharacter, returnCharacter)
 }
+
+func TestCharacterCreation(t *testing.T) {
+	t.SkipNow()
+}
+
+func TestGettingCasts(t *testing.T) {
+	t.SkipNow()
+}
+
+func TestGettingRaces(t *testing.T) {
+	t.SkipNow()
+}

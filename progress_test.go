@@ -15,3 +15,11 @@ func TestLevelUpDistributingPointsShouldEqualToMaximum(t *testing.T) {
 
 	assert.Equal(t, PointsPerLevel, sum, "Sum of distributed points did not equal maximum points per level.")
 }
+
+func TestLevelUpCharacterIsChanged(t *testing.T) {
+	c := createCharacter("testid", "testname")
+	beforeStats := c.Stats
+	c.LevelUp()
+	afterStats := c.Stats
+	assert.NotEqual(t, beforeStats, afterStats, "Before and after stat should not equal after a levelup.")
+}
