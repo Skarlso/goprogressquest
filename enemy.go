@@ -1,7 +1,7 @@
 //enemy a package discribing the properties of an enemy
 package main
 
-//Enemy discribes an enemy combatant.
+//Enemy represents an enemy combatant.
 type Enemy struct {
 	Name string
 	ID   string
