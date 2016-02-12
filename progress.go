@@ -6,16 +6,25 @@ import (
 )
 
 // PointsPerLevel is the maximum points a player can get per level.
-const PointsPerLevel = 15
+const PointsPerLevel = 20
 
 // LevelUp Level up a character.
 func (c *Character) LevelUp() {
+	// Apply basic character changes first.
 	stats := distributePoints()
 	c.Stats.Agility += stats[0]
 	c.Stats.Intelligence += stats[1]
 	c.Stats.Luck += stats[2]
 	c.Stats.Perception += stats[3]
 	c.Stats.Strenght += stats[4]
+	c.Stats.Constitution += stats[5]
+	c.Hp += 50
+	c.CurrentXp = 0
+
+	// Apply calculated changes next.
+	c.Hp += c.Hp / c.Stats.Constitution
+	c.NextLevelXp += c.Level * 1000
+	c.Level++
 }
 
 func distributePoints() []int {
@@ -23,7 +32,7 @@ func distributePoints() []int {
 	var stats []int
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 
-	for i := 5; i >= 1; i-- {
+	for i := 6; i >= 1; i-- {
 		stat := r.Intn(currentPoints-i) + 1
 		stats = append(stats, stat)
 		currentPoints -= stat

@@ -22,6 +22,7 @@ type Stats struct {
 	Intelligence int
 	Perception   int
 	Luck         int
+	Constitution int
 }
 
 // Body Represents a body of a Player which defines what he wears,
@@ -49,13 +50,16 @@ type Race struct {
 
 // Character is a player character.
 type Character struct {
-	ID        string
-	Inventory Inventory
-	Body      Body
-	Name      string
-	Stats     Stats
-	Gold      int
-	Level     int
-	Race      int
-	Cast      int
+	ID          string
+	Inventory   Inventory
+	Body        Body
+	Name        string
+	Stats       Stats
+	Hp          int
+	CurrentXp   int
+	NextLevelXp int
+	Gold        int
+	Level       int
+	Race        int
+	Cast        int
 }

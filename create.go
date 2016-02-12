@@ -76,7 +76,10 @@ func createCharacter(id, name string) Character {
 		Inventory: Inventory{
 			Items: []Item{},
 		},
-		Level: 1,
+		Level:       1,
+		Hp:          100,
+		CurrentXp:   0,
+		NextLevelXp: 1000,
 		//Starts out with everything at 5. Varies randomly later.
 		Stats: Stats{
 			Strenght:     5,
@@ -84,6 +87,7 @@ func createCharacter(id, name string) Character {
 			Luck:         5,
 			Perception:   5,
 			Agility:      5,
+			Constitution: 5,
 		},
 		Body: Body{
 			LRing:   Item{},

@@ -11,16 +11,16 @@ import (
 
 var adventureSignal = make(chan bool, 1)
 
-//AdventurerOnQuest advneturer On quest with Locking
+// AdventurerOnQuest advneturer On quest with Locking
 type AdventurerOnQuest struct {
 	m map[string]bool
 	sync.RWMutex
 }
 
-//TODO: For now, adventuring is saved to a map based on an ID
+// TODO: For now, adventuring is saved to a map based on an ID
 var adventurersOnQuest = AdventurerOnQuest{m: make(map[string]bool, 0)}
 
-//StartAdventure starts and adventure in an endless for loop, until a channel signals otherwise
+// StartAdventure starts and adventure in an endless for loop, until a channel signals otherwise
 func startAdventure(c *gin.Context) {
 
 	var adventurer struct {
@@ -78,7 +78,7 @@ func adventuring(id string, name string) {
 	}
 }
 
-//StopAdventure Stop adventuring
+// StopAdventure Stop adventuring
 func stopAdventure(c *gin.Context) {
 	//signal channel to stop fight.
 	var adventurer struct {
