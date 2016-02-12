@@ -5,5 +5,8 @@
     },{
         "name": "mage",
         "id": 2
+    },{
+        "name": "rouge",
+        "id": 3
     }]
 }
