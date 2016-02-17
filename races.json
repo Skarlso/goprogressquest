@@ -8,5 +8,8 @@
     },{
         "name": "dwarf",
         "id": 3
+    },{
+        "name": "hobbit",
+        "id": 4
     }]
 }
