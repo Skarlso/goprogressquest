@@ -4,6 +4,9 @@
         "id": 1
     },{
         "name": "human",
-        "id": 2        
+        "id": 2
+    },{
+        "name": "dwarf",
+        "id": 3
     }]
 }
