@@ -39,6 +39,8 @@ func (c Character) spawnEnemy() Enemy {
 	} else {
 		m.Level = c.Level - int(float64(c.Level)*0.2)
 	}
-
+	if m.Level < 0 {
+		m.Level = 0
+	}
 	return m
 }
