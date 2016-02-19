@@ -33,12 +33,9 @@ func (c Character) spawnEnemy() Enemy {
 	// Monster Level will be +- 20% of Character Level
 	m := Enemy{}
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	plusMinus := r.Intn(100)
-	if plusMinus&1 == 1 {
-		m.Level = c.Level + int(float64(c.Level)*0.2)
-	} else {
-		m.Level = c.Level - int(float64(c.Level)*0.2)
-	}
+	limiter := int(float64(c.Level) * 0.2)
+	m.Level = (c.Level - limiter) + r.Intn(limiter*2)
+
 	if m.Level < 0 {
 		m.Level = 0
 	}
