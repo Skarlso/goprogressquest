@@ -11,5 +11,8 @@
     },{
         "name": "hobbit",
         "id": 4
+    },{
+        "name": "goblin",
+        "id": 5
     }]
 }
