@@ -1,10 +1,17 @@
 {
 	"items": [{
-		"name": "Vengence",
-		"id": "10",
-		"dmg": 10,
-		"weight": 4,
+		"name": "Basic Sword",
+		"id": 1,
+		"dmg": 1,
+		"weight": 1,
 		"armor": 0,
-		"value": 10
+		"value": 1
+	},{
+		"name": "Basic Axe",
+		"id": 2,
+		"dmg": 2,
+		"weight": 2,
+		"armor": 0,
+		"value": 2
 	}]
 }

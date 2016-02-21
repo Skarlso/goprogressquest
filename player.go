@@ -3,7 +3,7 @@ package main
 // Item a representation of an Item and it's properties.
 type Item struct {
 	Name   string
-	ID     string
+	ID     int
 	Dmg    int
 	Weight int
 	Armor  int
