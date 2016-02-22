@@ -13,5 +13,12 @@
 		"weight": 2,
 		"armor": 0,
 		"value": 2
+	},{
+		"name": "Basic Spear",
+		"id": 3,
+		"dmg": 3,
+		"weight": 3,
+		"armor": 0,
+		"value": 4
 	}]
 }
