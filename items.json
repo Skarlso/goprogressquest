@@ -27,5 +27,12 @@
 		"weight": 4,
 		"armor": 0,
 		"value": 5
+	},{
+		"name": "Basic Shield",
+		"id": 5,
+		"dmg": 0,
+		"weight": 1,
+		"armor": 1,
+		"value": 1
 	}]
 }
