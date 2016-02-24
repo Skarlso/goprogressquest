@@ -20,5 +20,12 @@
 		"weight": 3,
 		"armor": 0,
 		"value": 4
+	},{
+		"name": "Basic Halbard",
+		"id": 4,
+		"dmg": 4,
+		"weight": 4,
+		"armor": 0,
+		"value": 5
 	}]
 }
