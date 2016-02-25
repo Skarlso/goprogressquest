@@ -41,5 +41,12 @@
 		"weight": 5,
 		"armor": 4,
 		"value": 5
+	},{
+		"name": "Basic Greatshield",
+		"id": 7,
+		"dmg": 0,
+		"weight": 10,
+		"armor": 10,
+		"value": 10
 	}]
 }
