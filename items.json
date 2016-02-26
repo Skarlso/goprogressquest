@@ -48,5 +48,12 @@
 		"weight": 10,
 		"armor": 10,
 		"value": 10
+	},{
+		"name": "Golden Avanger",
+		"id": 8,
+		"dmg": 10,
+		"weight": 5,
+		"armor": 0,
+		"value": 10
 	}]
 }
