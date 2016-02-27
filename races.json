@@ -14,5 +14,8 @@
     },{
         "name": "goblin",
         "id": 5
+    },{
+        "name": "celebrity",
+        "id": 6
     }]
 }
