@@ -55,5 +55,12 @@
 		"weight": 5,
 		"armor": 0,
 		"value": 10
+	},{
+		"name": "Flu",
+		"id": 9,
+		"dmg": 20,
+		"weight": 0,
+		"armor": 0,
+		"value": 10
 	}]
 }
