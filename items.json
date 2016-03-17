@@ -62,5 +62,12 @@
 		"weight": 0,
 		"armor": 0,
 		"value": 10
+	},{
+		"name": "Antibiotics",
+		"id": 10,
+		"dmg": 30,
+		"weight": 0,
+		"armor": 0,
+		"value": 100
 	}]
 }
