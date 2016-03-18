@@ -17,5 +17,8 @@
     },{
         "name": "celebrity",
         "id": 6
+    },{
+        "name": "virus",
+        "id": 7
     }]
 }
