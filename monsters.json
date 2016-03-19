@@ -3,7 +3,7 @@
 		"name": "Barbra Streisand",
 		"id": 1,
 		"race": 1,
-		"case": 1,
+		"cast": 1,
 		"items": [{
 			"id": 1
 		}],
@@ -12,8 +12,8 @@
 	}, {
 		"name": "Raging Hamster",
 		"id": 2,
-		"race": 8,
-		"case": 16,
+		"race": 1,
+		"cast": 1,
 		"items": [{
 			"id": 10
 		}],
@@ -23,7 +23,7 @@
 		"name": "Paranoid Dionarap",
 		"id": 3,
 		"race": 2,
-		"case": 32,
+		"cast": 3,
 		"items": [{
 			"id": 5,
             "id": 4
@@ -34,7 +34,18 @@
 		"name": "Asdf",
 		"id": 4,
 		"race": 2,
-		"case": 32,
+		"cast": 3,
+		"items": [{
+			"id": 5,
+            "id": 4
+		}],
+		"gold": 6,
+		"rare": 5
+	}, {
+		"name": "Finn The Human",
+		"id": 5,
+		"race": 2,
+		"cast": 3,
 		"items": [{
 			"id": 5,
             "id": 4
