@@ -23,3 +23,11 @@ func TestLevelUpCharacterIsChanged(t *testing.T) {
 	afterStats := c.Stats
 	assert.NotEqual(t, beforeStats, afterStats, "Before and after stat should not equal after a levelup.")
 }
+
+func TestLevelUpIncreasesHP(t *testing.T) {
+	c := createCharacter("id", "testname")
+	beforeHp := c.Hp
+	c.LevelUp()
+	afterHp := c.Hp
+	assert.NotEqual(t, beforeHp, afterHp, "Before hp equald after hp. It should not have.")
+}
