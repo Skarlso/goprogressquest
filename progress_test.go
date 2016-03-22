@@ -31,3 +31,10 @@ func TestLevelUpIncreasesHP(t *testing.T) {
 	afterHp := c.Hp
 	assert.NotEqual(t, beforeHp, afterHp, "Before hp equald after hp. It should not have.")
 }
+
+func TestLevelUpIncreasesXP(t *testing.T) {
+	c := createCharacter("id", "testname")
+	c.CurrentXp = 100
+	c.LevelUp()
+	assert.Equal(t, c.CurrentXp, 0, "Xp should be reset.")
+}
