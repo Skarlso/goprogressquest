@@ -38,3 +38,12 @@ func TestLevelUpIncreasesXP(t *testing.T) {
 	c.LevelUp()
 	assert.Equal(t, c.CurrentXp, 0, "Xp should be reset.")
 }
+
+func TestLevelUpIncreasesLevel(t *testing.T) {
+	c := createCharacter("id", "testname")
+	currentLevel := c.Level
+	c.LevelUp()
+	newLevel := c.Level
+	assert.NotEqual(t, newLevel, currentLevel, "Level should be higher.")
+	// assert.Condition(t, assert.Comparison(func(a, b int) bool { return b > a }), "Level should be higher.")
+}
