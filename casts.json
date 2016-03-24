@@ -11,5 +11,8 @@
     },{
         "name": "wizzard",
         "id": 4
+    },{
+        "name": "sorcerer",
+        "id": 5
     }]
 }
