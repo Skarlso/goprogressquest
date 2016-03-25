@@ -20,5 +20,8 @@
     },{
         "name": "virus",
         "id": 7
+    },{
+        "name": "troll",
+        "id": 8
     }]
 }
