@@ -74,6 +74,16 @@ func adventuring(id string, name string) {
 		}
 
 		log.Println("Adventuring...")
+		// TODO:
+		// Before steps:
+		// Low Health? => Rest
+		// Inventory full? => Sell
+		// Steps:
+		// Encounter an enemy
+		// Fight ->
+		// Low health => Flee && Rest
+		// Won -> Avard Xp ->
+		// Level up? => Level up
 		time.Sleep(time.Millisecond * 500)
 	}
 }
