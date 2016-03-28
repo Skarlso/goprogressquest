@@ -56,10 +56,22 @@ type Character struct {
 	Name        string
 	Stats       Stats
 	Hp          int
+	MaxHp       int
 	CurrentXp   int
 	NextLevelXp int
 	Gold        int
 	Level       int
 	Race        int
 	Cast        int
+}
+
+// Rest will Replenish Health.
+func (c *Character) Rest() {
+	c.Hp = c.MaxHp
+	mdb.Save(*c)
+}
+
+// SellItems will clear the inventory.
+func (c *Character) SellItems() {
+
 }

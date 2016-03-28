@@ -75,6 +75,7 @@ func adventuring(id string, name string) {
 
 		log.Println("Adventuring...")
 		// TODO:
+		// Get the player
 		// Before steps:
 		// Low Health? => Rest
 		// Inventory full? => Sell
@@ -84,8 +85,23 @@ func adventuring(id string, name string) {
 		// Low health => Flee && Rest
 		// Won -> Avard Xp ->
 		// Level up? => Level up
+		player, err := mdb.Load(id)
+		if err != nil {
+			panic(err)
+		}
+		if float64(player.Hp) < float64(player.Hp)*0.25 {
+			player.Rest()
+		}
 		time.Sleep(time.Millisecond * 500)
 	}
+}
+
+func encounterEnemy() {
+
+}
+
+func checkInventory() {
+
 }
 
 // StopAdventure Stop adventuring

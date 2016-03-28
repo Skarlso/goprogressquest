@@ -18,11 +18,12 @@ func (c *Character) LevelUp() {
 	c.Stats.Perception += stats[3]
 	c.Stats.Strenght += stats[4]
 	c.Stats.Constitution += stats[5]
-	c.Hp += 50
+	c.MaxHp += 50
+	c.Hp = c.MaxHp
 	c.CurrentXp = 0
 
 	// Apply calculated changes next.
-	c.Hp += c.Hp / c.Stats.Constitution
+	c.MaxHp += c.MaxHp / c.Stats.Constitution
 	c.NextLevelXp += c.Level * 1000
 	c.Level++
 }
@@ -46,11 +47,6 @@ func distributePoints() []int {
 
 // Attack an enemy during an encounter.
 func (c *Character) Attack(e Enemy) {
-
-}
-
-// Shop spend money.
-func (c *Character) Shop() {
 
 }
 

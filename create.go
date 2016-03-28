@@ -78,6 +78,7 @@ func createCharacter(id, name string) Character {
 		},
 		Level:       1,
 		Hp:          100,
+		MaxHp:       100,
 		CurrentXp:   0,
 		NextLevelXp: 1000,
 		//Starts out with everything at 5. Varies randomly later.

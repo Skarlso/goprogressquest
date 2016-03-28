@@ -26,9 +26,9 @@ func TestLevelUpCharacterIsChanged(t *testing.T) {
 
 func TestLevelUpIncreasesHP(t *testing.T) {
 	c := createCharacter("id", "testname")
-	beforeHp := c.Hp
+	beforeHp := c.MaxHp
 	c.LevelUp()
-	afterHp := c.Hp
+	afterHp := c.MaxHp
 	assert.NotEqual(t, beforeHp, afterHp, "Before hp equald after hp. It should not have.")
 }
 
