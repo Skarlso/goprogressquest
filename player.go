@@ -12,7 +12,8 @@ type Item struct {
 
 // Inventory holds an endless number of Items
 type Inventory struct {
-	Items []Item
+	Items    []Item
+	Capacity int
 }
 
 // Stats contains a groupped information about stats of a character

@@ -92,6 +92,11 @@ func adventuring(id string, name string) {
 		if float64(player.Hp) < float64(player.Hp)*0.25 {
 			player.Rest()
 		}
+
+		if invetoryIsOverLimit(player) {
+			player.SellItems()
+		}
+
 		time.Sleep(time.Millisecond * 500)
 	}
 }
@@ -100,8 +105,17 @@ func encounterEnemy() {
 
 }
 
-func checkInventory() {
+func invetoryIsOverLimit(c Character) bool {
+	currCap := 0
+	for _, v := range c.Inventory.Items {
+		currCap += v.Weight
+	}
 
+	if currCap >= c.Inventory.Capacity {
+		return true
+	}
+
+	return false
 }
 
 // StopAdventure Stop adventuring

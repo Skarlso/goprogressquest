@@ -74,7 +74,8 @@ func createCharacter(id, name string) Character {
 		Cast: selectRandomCast(),
 		Gold: 0,
 		Inventory: Inventory{
-			Items: []Item{},
+			Items:    []Item{},
+			Capacity: 80,
 		},
 		Level:       1,
 		Hp:          100,
