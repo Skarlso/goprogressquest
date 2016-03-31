@@ -74,5 +74,9 @@ func (c *Character) Rest() {
 
 // SellItems will clear the inventory.
 func (c *Character) SellItems() {
+	for _, v := range c.Inventory.Items {
+		c.Gold += v.Value
+	}
 
+	c.Inventory.Items = []Item{}
 }
