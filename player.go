@@ -79,4 +79,5 @@ func (c *Character) SellItems() {
 	}
 
 	c.Inventory.Items = []Item{}
+	mdb.Save(*c)
 }
