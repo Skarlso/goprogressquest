@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"math/rand"
 	"net/http"
 	"sync"
 	"time"
@@ -97,12 +98,27 @@ func adventuring(id string, name string) {
 			player.SellItems()
 		}
 
+		player.Attack(spawnEnemy(player))
+
 		time.Sleep(time.Millisecond * 500)
 	}
 }
 
-func encounterEnemy() {
+// spawnEnemy spawns an enemy combatand who's stats are based on the player's character.
+func spawnEnemy(c Character) Enemy {
+	// Monster Level will be +- 20% of Character Level
+	m := Enemy{}
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	limiter := int(float64(c.Level) * 0.2)
+	if limiter < 0 {
+		limiter = 1
+	}
+	m.Level = (c.Level - limiter) + r.Intn(limiter*2)
 
+	if m.Level < 0 {
+		m.Level = 0
+	}
+	return m
 }
 
 func invetoryIsOverLimit(c Character) bool {

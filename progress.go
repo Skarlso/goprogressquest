@@ -44,13 +44,3 @@ func distributePoints() []int {
 
 	return stats
 }
-
-// Attack an enemy during an encounter.
-func (c *Character) Attack(e Enemy) {
-
-}
-
-// Progress general progress.
-func (c *Character) Progress() {
-
-}

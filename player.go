@@ -81,3 +81,13 @@ func (c *Character) SellItems() {
 	c.Inventory.Items = []Item{}
 	mdb.Save(*c)
 }
+
+// Attack an enemy during an encounter.
+func (c *Character) Attack(e Enemy) {
+
+}
+
+// Progress general progress.
+func (c *Character) Progress() {
+
+}
