@@ -110,9 +110,10 @@ func spawnEnemy(c Character) Enemy {
 	m := Enemy{}
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	limiter := int(float64(c.Level) * 0.2)
-	if limiter < 0 {
+	if limiter <= 0 {
 		limiter = 1
 	}
+
 	m.Level = (c.Level - limiter) + r.Intn(limiter*2)
 
 	if m.Level < 0 {
