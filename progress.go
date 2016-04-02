@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"math/rand"
 	"time"
 )
@@ -11,6 +12,7 @@ const PointsPerLevel = 20
 // LevelUp Level up a character.
 func (c *Character) LevelUp() {
 	// Apply basic character changes first.
+	log.Println("************Player reached a new level!************")
 	stats := distributePoints()
 	c.Stats.Agility += stats[0]
 	c.Stats.Intelligence += stats[1]
@@ -26,6 +28,8 @@ func (c *Character) LevelUp() {
 	c.MaxHp += c.MaxHp / c.Stats.Constitution
 	c.NextLevelXp += c.Level * 1000
 	c.Level++
+	mdb.Update(*c)
+	log.Println("Current level is:", c.Level)
 }
 
 func distributePoints() []int {

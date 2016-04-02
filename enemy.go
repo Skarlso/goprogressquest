@@ -28,6 +28,9 @@ type Enemy struct {
 	Level int
 	// RarenessLevel is 1-10 where 10 is highly rare
 	RarenessLevel int
+	// Armor is given for now. Should be increased with level
+	Armor  int
+	Damage int
 }
 
 // SpawnEnemy spawns an enemy combatand who's stats are based on the player's character.
@@ -50,14 +53,16 @@ type MonsterItem struct {
 
 // Monster is a monster from the monsters.json file.
 type Monster struct {
-	Name  string        `json:"name"`
-	ID    int           `json:"id"`
-	Race  int           `json:"race"`
-	Cast  int           `json:"cast"`
-	Items []MonsterItem `json:"items"`
-	Gold  int           `json:"gold"`
-	Rare  int           `json:"rare"`
-	Xp    int           `json:"xp"`
+	Name   string        `json:"name"`
+	ID     int           `json:"id"`
+	Race   int           `json:"race"`
+	Cast   int           `json:"cast"`
+	Items  []MonsterItem `json:"items"`
+	Gold   int           `json:"gold"`
+	Rare   int           `json:"rare"`
+	Xp     int           `json:"xp"`
+	Armor  int           `json:"armor"`
+	Damage int           `json:"damage"`
 }
 
 // Monsters is a collection of monsters.
@@ -91,6 +96,8 @@ func (e *Enemy) initializeStatsFromJSON() {
 	e.ID = strconv.Itoa(m.Monster[index].ID)
 	e.Name = m.Monster[index].Name
 	e.Xp = m.Monster[index].Xp
+	e.Armor = m.Monster[index].Armor
+	e.Damage = m.Monster[index].Damage
 
 	allItemsMap := loadItemsToMap()
 	var monsterItems []Item

@@ -9,7 +9,9 @@
 		}],
 		"gold": 1,
 		"rare": 10,
-		"xp": 100
+		"xp": 100,
+		"armor": 0,
+		"damage": 1
 	}, {
 		"name": "Raging Hamster",
 		"id": 2,
@@ -20,7 +22,9 @@
 		}],
 		"gold": 100000000,
 		"rare": 1,
-		"xp": 200
+		"xp": 200,
+		"armor": 1,
+		"damage": 2
 	}, {
 		"name": "Paranoid Dionarap",
 		"id": 3,
@@ -33,7 +37,9 @@
 		}],
 		"gold": 6,
 		"rare": 5,
-		"xp": 300
+		"xp": 300,
+		"armor": 2,
+		"damage": 3
 	}, {
 		"name": "Asdf",
 		"id": 4,
@@ -46,7 +52,9 @@
 		}],
 		"gold": 6,
 		"rare": 5,
-		"xp": 400
+		"xp": 400,
+		"armor": 3,
+		"damage": 4
 	}, {
 		"name": "Finn The Human",
 		"id": 5,
@@ -59,6 +67,8 @@
 		}],
 		"gold": 6,
 		"rare": 5,
-		"xp": 500
+		"xp": 500,
+		"armor": 4,
+		"damage": 5
 	}]
 }

@@ -17,7 +17,6 @@ type AdventurerOnQuest struct {
 	sync.RWMutex
 }
 
-// TODO: For now, adventuring is saved to a map based on an ID
 var adventurersOnQuest = AdventurerOnQuest{m: make(map[string]bool, 0)}
 
 // StartAdventure starts and adventure in an endless for loop, until a channel signals otherwise
@@ -59,6 +58,11 @@ func adventuring(id string, name string) {
 	adventurersOnQuest.m[id] = true
 	adventurersOnQuest.Unlock()
 	stop := false
+	player, err := mdb.Load(id)
+	if err != nil {
+		panic(err)
+	}
+
 	for {
 		select {
 		case stop = <-adventureSignal:
@@ -87,11 +91,7 @@ func adventuring(id string, name string) {
 		// Level up? => Level up
 		// Check items and equip if better
 		// Save player (Progress will not be saved because it's irrelevant.)
-		player, err := mdb.Load(id)
-		if err != nil {
-			panic(err)
-		}
-		if float64(player.Hp) < float64(player.Hp)*0.25 {
+		if float64(player.Hp) <= (float64(player.Hp) * 0.25) {
 			player.Rest()
 		}
 
@@ -109,7 +109,6 @@ func adventuring(id string, name string) {
 			player.LevelUp()
 		}
 
-		mdb.Save(player)
 		time.Sleep(time.Millisecond * 500)
 	}
 }

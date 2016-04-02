@@ -95,8 +95,8 @@ func TestLoadingCharacter(t *testing.T) {
 
 	returnCharacter := Character{}
 	json.Unmarshal(resp.Body.Bytes(), &returnCharacter)
-	log.Println("Expected:", expectedCharacter)
-	log.Println("Actual:", returnCharacter)
+	// log.Println("Expected:", expectedCharacter)
+	// log.Println("Actual:", returnCharacter)
 	assert.Equal(t, expectedCharacter, returnCharacter)
 }
 

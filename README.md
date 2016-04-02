@@ -69,7 +69,7 @@ Adventuring related
 ```json
 POST:
 {
-    "name":"MyAwesomeCharacterName"
+    "id":"03d67c263c27a453ef65b29e30334727333ccbcd"
 }
 ```
 Return:
@@ -86,7 +86,7 @@ Return:
 ```json
 POST:
 {
-    "name":"MyAwesomeCharacterName"
+    "id":"03d67c263c27a453ef65b29e30334727333ccbcd"
 }
 ```
 Return:

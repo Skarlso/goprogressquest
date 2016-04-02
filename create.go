@@ -67,6 +67,7 @@ func loadCharacter(c *gin.Context) {
 }
 
 func createCharacter(id, name string) Character {
+	w := Item{Name: "Basic Sword", ID: 1, Armor: 0, Dmg: 10, Weight: 1, Value: 10}
 	ch := Character{
 		ID:   id,
 		Name: name,
@@ -96,7 +97,7 @@ func createCharacter(id, name string) Character {
 			RRing:   Item{},
 			Armor:   Item{},
 			Head:    Item{},
-			Weapond: Item{},
+			Weapond: w,
 			Shield:  Item{},
 		},
 	}
