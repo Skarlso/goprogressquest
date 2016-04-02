@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -86,4 +87,12 @@ func (e *Enemy) initializeStatsFromJSON() {
 		panic(err)
 	}
 
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	index := r.Intn(len(m.Monster))
+	e.Cast = m.Monster[index].Cast
+	e.Race = m.Monster[index].Race
+	e.RarenessLevel = m.Monster[index].Rare
+	e.Gold = m.Monster[index].Gold
+	e.ID = strconv.Itoa(m.Monster[index].ID)
+	e.Name = m.Monster[index].Name
 }
