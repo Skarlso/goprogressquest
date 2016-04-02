@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"math/rand"
 	"net/http"
 	"sync"
 	"time"
@@ -86,6 +85,8 @@ func adventuring(id string, name string) {
 		// Low health => Flee && Rest
 		// Won -> Avard Xp ->
 		// Level up? => Level up
+		// Check items and equip if better
+		// Save player (Progress will not be saved because it's irrelevant.)
 		player, err := mdb.Load(id)
 		if err != nil {
 			panic(err)
@@ -98,28 +99,19 @@ func adventuring(id string, name string) {
 			player.SellItems()
 		}
 
-		player.Attack(spawnEnemy(player))
+		// TODO: Do a switch on possible actions:
+		// * Encounter
+		// * Discovery
+		// * Nothing
+		player.Attack(SpawnEnemy(player))
 
+		if player.CurrentXp >= player.NextLevelXp {
+			player.LevelUp()
+		}
+
+		mdb.Save(player)
 		time.Sleep(time.Millisecond * 500)
 	}
-}
-
-// spawnEnemy spawns an enemy combatand who's stats are based on the player's character.
-func spawnEnemy(c Character) Enemy {
-	// Monster Level will be +- 20% of Character Level
-	m := Enemy{}
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	limiter := int(float64(c.Level) * 0.2)
-	if limiter <= 0 {
-		limiter = 1
-	}
-
-	m.Level = (c.Level - limiter) + r.Intn(limiter*2)
-
-	if m.Level < 0 {
-		m.Level = 0
-	}
-	return m
 }
 
 func invetoryIsOverLimit(c Character) bool {
