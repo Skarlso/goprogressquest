@@ -10,21 +10,23 @@ import (
 	"time"
 )
 
-//Enemy represents an enemy combatant.
+// Enemy represents an enemy combatant.
 type Enemy struct {
 	Name string
 	ID   string
 	Race int
 	Cast int
-	//Items which the player can loot. Will be crossreferenced with Items, from items.json
+	// Calculated based on player's HP
+	Hp int
+	// Items which the player can loot. Will be crossreferenced with Items, from items.json
 	Items []Item
-	//Gold which the player can loot
+	// Gold which the player can loot
 	Gold int
-	//Xp is calculated based on level and rareness
+	// Xp is calculated based on level and rareness
 	Xp int
-	//Level is calculated based on the Players level. +-5%
+	// Level is calculated based on the Players level. +-5%
 	Level int
-	//RarenessLevel is 1-10 where 10 is highly rare
+	// RarenessLevel is 1-10 where 10 is highly rare
 	RarenessLevel int
 }
 
@@ -33,20 +35,11 @@ type Enemy struct {
 func SpawnEnemy(c Character) Enemy {
 	// Monster Level will be +- 20% of Character Level
 	m := Enemy{}
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	limiter := int(float64(c.Level) * 0.2)
-	if limiter <= 0 {
-		limiter = 1
-	}
-
-	m.Level = (c.Level - limiter) + r.Intn(limiter*2)
-
-	if m.Level < 0 {
-		m.Level = 0
-	}
-
+	// TODO: Generated Monster names and stats. Instead of saved ones.
 	m.initializeStatsFromJSON()
-
+	m.Hp = calculateEnemyHp(c.MaxHp)
+	m.Level = calculateEnemyLevel(c.Level)
+	m.Xp = calculateEnemyXpAvard(c.Level, m.Xp)
 	return m
 }
 
@@ -64,6 +57,7 @@ type Monster struct {
 	Items []MonsterItem `json:"items"`
 	Gold  int           `json:"gold"`
 	Rare  int           `json:"rare"`
+	Xp    int           `json:"xp"`
 }
 
 // Monsters is a collection of monsters.
@@ -71,6 +65,7 @@ type Monsters struct {
 	Monster []Monster `json:"monsters"`
 }
 
+// initializeStatsFromJSON initialize the stats of an enemy with stats from the monsters JSON file.
 func (e *Enemy) initializeStatsFromJSON() {
 
 	m := Monsters{}
@@ -95,4 +90,86 @@ func (e *Enemy) initializeStatsFromJSON() {
 	e.Gold = m.Monster[index].Gold
 	e.ID = strconv.Itoa(m.Monster[index].ID)
 	e.Name = m.Monster[index].Name
+	e.Xp = m.Monster[index].Xp
+
+	allItemsMap := loadItemsToMap()
+	var monsterItems []Item
+	for _, i := range m.Monster[index].Items {
+		monsterItems = append(monsterItems, allItemsMap[i.ID])
+	}
+	e.Items = monsterItems
+}
+
+// Items is a collection of all the items from the items file.
+type Items struct {
+	Items []Item `json:"items"`
+}
+
+// loadItemsToMap will load all the items into a map so they can be easily selected.
+func loadItemsToMap() (itemsMap map[int]Item) {
+	i := Items{}
+	itemsMap = make(map[int]Item)
+	file, err := os.Open("items.json")
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+	data, _ := ioutil.ReadAll(file)
+
+	err = json.Unmarshal(data, &i)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, v := range i.Items {
+		itemsMap[v.ID] = v
+	}
+
+	return
+}
+
+// calculateEnemyHp calculates eveny hp.
+// TODO: For now this is the same as level. Come up with something better!
+func calculateEnemyHp(playerHp int) int {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	limiter := int(float64(playerHp) * 0.2)
+	if limiter <= 0 {
+		limiter = 1
+	}
+
+	hp := (playerHp - limiter) + r.Intn(limiter*2)
+
+	if hp < 100 {
+		hp = 100
+	}
+
+	return hp
+}
+
+// calculateEnemyLevel calculates enemy's level based on the player.
+func calculateEnemyLevel(playerLevel int) int {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	limiter := int(float64(playerLevel) * 0.2)
+	if limiter <= 0 {
+		limiter = 1
+	}
+
+	level := (playerLevel - limiter) + r.Intn(limiter*2)
+
+	if level < 0 {
+		level = 0
+	}
+
+	return level
+}
+
+// calculateEnemyXpAvard currently it just multiplies the base xp of a monsters
+// by 30% of players level.
+// Later this will be a graded system with Challenge Rating for monsters based on
+// RarenessLevel, Gold, Xp, HP.
+func calculateEnemyXpAvard(playerLevel, initialMonsterXp int) int {
+	multiplier := float64(playerLevel) * 0.3
+	newXp := int(float64(initialMonsterXp)*multiplier) + initialMonsterXp
+
+	return newXp
 }

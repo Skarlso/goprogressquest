@@ -85,4 +85,6 @@ func (c *Character) SellItems() {
 // Attack an enemy during an encounter.
 func (c *Character) Attack(e Enemy) {
 	// Fight until enemy is dead, or player is below 25%.
+	// playerHpLimit := int(float64(player.Hp)*0.25)
+	// enemyHpLimit := e.
 }

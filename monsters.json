@@ -8,7 +8,8 @@
 			"id": 1
 		}],
 		"gold": 1,
-		"rare": 10
+		"rare": 10,
+		"xp": 100
 	}, {
 		"name": "Raging Hamster",
 		"id": 2,
@@ -18,39 +19,46 @@
 			"id": 10
 		}],
 		"gold": 100000000,
-		"rare": 1
+		"rare": 1,
+		"xp": 200
 	}, {
 		"name": "Paranoid Dionarap",
 		"id": 3,
 		"race": 2,
 		"cast": 3,
 		"items": [{
-			"id": 5,
-            "id": 4
+			"id": 5
+		}, {
+			"id": 4
 		}],
 		"gold": 6,
-		"rare": 5
+		"rare": 5,
+		"xp": 300
 	}, {
 		"name": "Asdf",
 		"id": 4,
 		"race": 2,
 		"cast": 3,
 		"items": [{
-			"id": 5,
-            "id": 4
+			"id": 5
+		}, {
+			"id": 4
 		}],
 		"gold": 6,
-		"rare": 5
+		"rare": 5,
+		"xp": 400
 	}, {
 		"name": "Finn The Human",
 		"id": 5,
 		"race": 2,
 		"cast": 3,
 		"items": [{
-			"id": 5,
-            "id": 4
+			"id": 5
+		}, {
+			"id": 4
 		}],
 		"gold": 6,
-		"rare": 5
+		"rare": 5,
+		"xp": 500
 	}]
 }
