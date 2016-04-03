@@ -4,39 +4,39 @@ import "log"
 
 // Item a representation of an Item and it's properties.
 type Item struct {
-	Name   string `bson:"name"`
-	ID     int    `bson:"id"`
-	Dmg    int    `bson:"dmg"`
-	Weight int    `bson:"weight"`
-	Armor  int    `bson:"armor"`
-	Value  int    `bson:"value"`
+	Name   string `json:"name"`
+	ID     int    `json:"id"`
+	Dmg    int    `json:"dmg"`
+	Weight int    `json:"weight"`
+	Armor  int    `json:"armor"`
+	Value  int    `json:"value"`
 }
 
 // Inventory holds an endless number of Items
 type Inventory struct {
-	Items    []Item `bson:"items"`
-	Capacity int    `bson:"capacity"`
+	Items    []Item `json:"items"`
+	Capacity int    `json:"capacity"`
 }
 
 // Stats contains a groupped information about stats of a character
 type Stats struct {
-	Strenght     int `bson:"strength"`
-	Agility      int `bson:"agility"`
-	Intelligence int `bson:"intelligence"`
-	Perception   int `bson:"perception"`
-	Luck         int `bson:"luck"`
-	Constitution int `bson:"consititution"`
+	Strenght     int `json:"strength"`
+	Agility      int `json:"agility"`
+	Intelligence int `json:"intelligence"`
+	Perception   int `json:"perception"`
+	Luck         int `json:"luck"`
+	Constitution int `json:"consititution"`
 }
 
 // Body Represents a body of a Player which defines what he wears,
 // Player will always automatically wear the best gear.
 type Body struct {
-	LRing   Item `bson:"lring"`
-	RRing   Item `bson:"rring"`
-	Armor   Item `bson:"armor"`
-	Head    Item `bson:"head"`
-	Weapond Item `bson:"weapond"`
-	Shield  Item `bson:"shield"`
+	LRing   Item `json:"lring"`
+	RRing   Item `json:"rring"`
+	Armor   Item `json:"armor"`
+	Head    Item `json:"head"`
+	Weapond Item `json:"weapond"`
+	Shield  Item `json:"shield"`
 }
 
 // Cast the cast of a player, like mage, rouge, warrior...
@@ -53,19 +53,19 @@ type Race struct {
 
 // Character is a player character.
 type Character struct {
-	ID          string    `bson:"id"`
-	Inventory   Inventory `bson:"inventory"`
-	Body        Body      `bson:"body"`
-	Name        string    `bson:"name"`
-	Stats       Stats     `bson:"stats"`
-	Hp          int       `bson:"hp"`
-	MaxHp       int       `bson:"maxhp"`
-	CurrentXp   int       `bson:"currentxp"`
-	NextLevelXp int       `bson:"nextlevelxp"`
-	Gold        int       `bson:"gold"`
-	Level       int       `bson:"level"`
-	Race        int       `bson:"race"`
-	Cast        int       `bson:"cast"`
+	ID          string    `json:"id"`
+	Inventory   Inventory `json:"inventory"`
+	Body        Body      `json:"body"`
+	Name        string    `json:"name"`
+	Stats       Stats     `json:"stats"`
+	Hp          int       `json:"hp"`
+	MaxHp       int       `json:"maxhp"`
+	CurrentXp   int       `json:"currentxp"`
+	NextLevelXp int       `json:"nextlevelxp"`
+	Gold        int       `json:"gold"`
+	Level       int       `json:"level"`
+	Race        int       `json:"race"`
+	Cast        int       `json:"cast"`
 }
 
 // Rest will Replenish Health.

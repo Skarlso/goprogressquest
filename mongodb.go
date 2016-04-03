@@ -44,7 +44,10 @@ func (mdb MongoDBConnection) Update(ch Character) error {
 	change := bson.M{"$set": bson.M{"stats.strenght": ch.Stats.Strenght, "stats.agility": ch.Stats.Agility,
 		"stats.intelligence": ch.Stats.Intelligence, "stats.perception": ch.Stats.Perception,
 		"stats.luck": ch.Stats.Luck, "stats.constitution": ch.Stats.Constitution, "hp": ch.Hp, "maxhp": ch.MaxHp,
-		"currentxp": ch.CurrentXp, "nextlevelxp": ch.NextLevelXp, "gold": ch.Gold, "level": ch.Level}}
+		"currentxp": ch.CurrentXp, "nextlevelxp": ch.NextLevelXp, "gold": ch.Gold, "level": ch.Level,
+		"inventory.items": ch.Inventory.Items, "inventory.capacity": ch.Inventory.Capacity,
+		"body.armor": ch.Body.Armor, "body.head": ch.Body.Head, "body.lring": ch.Body.LRing,
+		"body.rring": ch.Body.RRing, "body.shield": ch.Body.Shield, "body.weapond": ch.Body.Weapond}}
 	// log.Println("Update Doc:", string(data))
 	err := c.Update(player, change)
 	log.Println("Updating character:", ch)
