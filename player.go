@@ -107,10 +107,15 @@ func (c *Character) Attack(e Enemy) {
 	if e.Hp <= 0 {
 		log.Println("Player won!")
 		c.CurrentXp += e.Xp
-		//TODO: award items here as well.
+		c.Inventory.Items = append(c.Inventory.Items, e.Items...)
 		mdb.Update(*c)
 		return
 	}
 	log.Println("Enemy won. Player has fled with hp:", c.Hp)
 	mdb.Update(*c)
+}
+
+// checkForBetterItems checks the players inventory for better items to wear.
+func (c *Character) checkForBetterItems() {
+
 }

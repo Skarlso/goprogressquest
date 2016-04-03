@@ -78,19 +78,6 @@ func adventuring(id string, name string) {
 		}
 
 		log.Println("Adventuring...")
-		// TODO:
-		// Get the player
-		// Before steps:
-		// Low Health? => Rest
-		// Inventory full? => Sell
-		// Steps:
-		// Encounter an enemy
-		// Fight ->
-		// Low health => Flee && Rest
-		// Won -> Avard Xp ->
-		// Level up? => Level up
-		// Check items and equip if better
-		// Save player (Progress will not be saved because it's irrelevant.)
 		if float64(player.Hp) <= (float64(player.Hp) * 0.25) {
 			player.Rest()
 		}
@@ -108,7 +95,7 @@ func adventuring(id string, name string) {
 		if player.CurrentXp >= player.NextLevelXp {
 			player.LevelUp()
 		}
-
+		player.checkForBetterItems()
 		time.Sleep(time.Millisecond * 500)
 	}
 }
