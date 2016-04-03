@@ -39,14 +39,14 @@ func (mdb MongoDBConnection) Update(ch Character) error {
 	defer mdb.session.Close()
 	c := mdb.session.DB("adventure").C("characters")
 
-	data, err := bson.Marshal(&ch)
-	if err != nil {
-		panic(err)
-	}
-
 	player := bson.M{"id": ch.ID}
-	change := bson.M{"$set": data}
-	err = c.Update(player, change)
+	//TODO: I need to find a better way of doing this. Put the fields into a map[string]interface{}?
+	change := bson.M{"$set": bson.M{"stats.strenght": ch.Stats.Strenght, "stats.agility": ch.Stats.Agility,
+		"stats.intelligence": ch.Stats.Intelligence, "stats.perception": ch.Stats.Perception,
+		"stats.luck": ch.Stats.Luck, "stats.constitution": ch.Stats.Constitution, "hp": ch.Hp, "maxhp": ch.MaxHp,
+		"currentxp": ch.CurrentXp, "nextlevelxp": ch.NextLevelXp, "gold": ch.Gold, "level": ch.Level}}
+	// log.Println("Update Doc:", string(data))
+	err := c.Update(player, change)
 	log.Println("Updating character:", ch)
 	return err
 }

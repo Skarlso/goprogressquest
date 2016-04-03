@@ -4,39 +4,39 @@ import "log"
 
 // Item a representation of an Item and it's properties.
 type Item struct {
-	Name   string
-	ID     int
-	Dmg    int
-	Weight int
-	Armor  int
-	Value  int
+	Name   string `bson:"name"`
+	ID     int    `bson:"id"`
+	Dmg    int    `bson:"dmg"`
+	Weight int    `bson:"weight"`
+	Armor  int    `bson:"armor"`
+	Value  int    `bson:"value"`
 }
 
 // Inventory holds an endless number of Items
 type Inventory struct {
-	Items    []Item
-	Capacity int
+	Items    []Item `bson:"items"`
+	Capacity int    `bson:"capacity"`
 }
 
 // Stats contains a groupped information about stats of a character
 type Stats struct {
-	Strenght     int
-	Agility      int
-	Intelligence int
-	Perception   int
-	Luck         int
-	Constitution int
+	Strenght     int `bson:"strength"`
+	Agility      int `bson:"agility"`
+	Intelligence int `bson:"intelligence"`
+	Perception   int `bson:"perception"`
+	Luck         int `bson:"luck"`
+	Constitution int `bson:"consititution"`
 }
 
 // Body Represents a body of a Player which defines what he wears,
 // Player will always automatically wear the best gear.
 type Body struct {
-	LRing   Item
-	RRing   Item
-	Armor   Item
-	Head    Item
-	Weapond Item
-	Shield  Item
+	LRing   Item `bson:"lring"`
+	RRing   Item `bson:"rring"`
+	Armor   Item `bson:"armor"`
+	Head    Item `bson:"head"`
+	Weapond Item `bson:"weapond"`
+	Shield  Item `bson:"shield"`
 }
 
 // Cast the cast of a player, like mage, rouge, warrior...
@@ -53,19 +53,19 @@ type Race struct {
 
 // Character is a player character.
 type Character struct {
-	ID          string
-	Inventory   Inventory
-	Body        Body
-	Name        string
-	Stats       Stats
-	Hp          int
-	MaxHp       int
-	CurrentXp   int
-	NextLevelXp int
-	Gold        int
-	Level       int
-	Race        int
-	Cast        int
+	ID          string    `bson:"id"`
+	Inventory   Inventory `bson:"inventory"`
+	Body        Body      `bson:"body"`
+	Name        string    `bson:"name"`
+	Stats       Stats     `bson:"stats"`
+	Hp          int       `bson:"hp"`
+	MaxHp       int       `bson:"maxhp"`
+	CurrentXp   int       `bson:"currentxp"`
+	NextLevelXp int       `bson:"nextlevelxp"`
+	Gold        int       `bson:"gold"`
+	Level       int       `bson:"level"`
+	Race        int       `bson:"race"`
+	Cast        int       `bson:"cast"`
 }
 
 // Rest will Replenish Health.
