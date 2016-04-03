@@ -1,6 +1,10 @@
 package main
 
-import "log"
+import (
+	"log"
+
+	"github.com/fatih/color"
+)
 
 // Item a representation of an Item and it's properties.
 type Item struct {
@@ -71,7 +75,9 @@ type Character struct {
 // Rest will Replenish Health.
 func (c *Character) Rest() {
 	c.Hp = c.MaxHp
+	color.Set(color.FgBlue)
 	log.Println("Player is fully rested.")
+	color.Unset()
 	mdb.Update(*c)
 }
 
@@ -80,7 +86,10 @@ func (c *Character) SellItems() {
 	for _, v := range c.Inventory.Items {
 		c.Gold += v.Value
 	}
-	log.Println("Player has sold all items. Current gold is:", c.Gold)
+	yellow := color.New(color.FgYellow).SprintFunc()
+	color.Set(color.FgBlue)
+	log.Printf("Player has sold all items. Current gold is: %s\n", yellow(c.Gold))
+	color.Unset()
 	c.Inventory.Items = []Item{}
 	mdb.Update(*c)
 }
@@ -88,7 +97,8 @@ func (c *Character) SellItems() {
 // Attack an enemy during an encounter.
 func (c *Character) Attack(e Enemy) {
 	// Fight until enemy is dead, or player is below 25%.
-	log.Println("Attacking enemy:", e)
+	red := color.New(color.FgRed, color.Bold).SprintFunc()
+	log.Printf("Attacking enemy: %s\n", red(e.Name))
 	playerHpLimit := int(float64(c.Hp) * 0.25)
 	playerDamage := c.Body.Weapond.Dmg - e.Armor
 	if playerDamage <= 0 {
@@ -101,17 +111,19 @@ func (c *Character) Attack(e Enemy) {
 	for c.Hp > playerHpLimit && e.Hp > 0 {
 		e.Hp -= playerDamage
 		c.Hp -= enemyDamage
-		// log.Println("player hp:", c.Hp)
-		// log.Println("enemy hp:", e.Hp)
 	}
 	if e.Hp <= 0 {
+		color.Set(color.FgCyan)
 		log.Println("Player won!")
+		color.Unset()
 		c.CurrentXp += e.Xp
 		c.Inventory.Items = append(c.Inventory.Items, e.Items...)
 		mdb.Update(*c)
 		return
 	}
-	log.Println("Enemy won. Player has fled with hp:", c.Hp)
+	color.Set(color.FgHiRed)
+	log.Println("Enemy won. Player has fled with hp: ", c.Hp)
+	color.Unset()
 	mdb.Update(*c)
 }
 

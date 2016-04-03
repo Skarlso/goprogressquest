@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -20,7 +18,6 @@ func (mdb MongoDBConnection) Save(ch Character) error {
 	defer mdb.session.Close()
 	c := mdb.session.DB("adventure").C("characters")
 	err := c.Insert(ch)
-	log.Println("Saving character:", ch)
 	return err
 }
 
@@ -50,7 +47,6 @@ func (mdb MongoDBConnection) Update(ch Character) error {
 		"body.rring": ch.Body.RRing, "body.shield": ch.Body.Shield, "body.weapond": ch.Body.Weapond}}
 	// log.Println("Update Doc:", string(data))
 	err := c.Update(player, change)
-	log.Println("Updating character:", ch)
 	return err
 }
 

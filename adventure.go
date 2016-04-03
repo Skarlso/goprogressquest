@@ -78,7 +78,7 @@ func adventuring(id string, name string) {
 		}
 
 		log.Println("Adventuring...")
-		if float64(player.Hp) <= (float64(player.Hp) * 0.25) {
+		if player.Hp <= int((float64(player.MaxHp) * 0.25)) {
 			player.Rest()
 		}
 

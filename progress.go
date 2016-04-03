@@ -4,6 +4,8 @@ import (
 	"log"
 	"math/rand"
 	"time"
+
+	"github.com/fatih/color"
 )
 
 // PointsPerLevel is the maximum points a player can get per level.
@@ -12,7 +14,9 @@ const PointsPerLevel = 20
 // LevelUp Level up a character.
 func (c *Character) LevelUp() {
 	// Apply basic character changes first.
+	color.Set(color.FgMagenta, color.Bold)
 	log.Println("************Player reached a new level!************")
+	color.Unset()
 	stats := distributePoints()
 	c.Stats.Agility += stats[0]
 	c.Stats.Intelligence += stats[1]
@@ -29,7 +33,8 @@ func (c *Character) LevelUp() {
 	c.NextLevelXp += c.Level * 1000
 	c.Level++
 	mdb.Update(*c)
-	log.Println("Current level is:", c.Level)
+	green := color.New(color.FgGreen).SprintFunc()
+	log.Printf("Current level is:%s\n", green(c.Level))
 }
 
 func distributePoints() []int {

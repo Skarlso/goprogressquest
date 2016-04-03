@@ -1,6 +1,23 @@
 Changes to Go ProgressQuest
 ===========================
 
+v0.2.0
+------
+
+* Basic Fighting implemented
+* Encountering an enemy implemented
+* Colored log output for better visuals
+* Selling items is the inventory is full (Character reached maximum bearing)
+* Multiple characters can adventure at the same time
+
+Future plans:
+* Buying potion
+* Buying armor / weapons
+* Unique name for created characters. Currently there is no check on uniqueness
+* Implementing the three possible encounters: Discovery, Encounter, Neutral
+* Improve the tests
+
+
 v0.1.1
 ------
 
