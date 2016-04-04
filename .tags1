@@ -1,0 +1,11 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	0	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+MongoDBConnection	/Users/hannibal/golang/src/github.com/skarlso/goprogressquest/mongodb.go	/^type MongoDBConnection struct {$/;"	type	line:13
+Save	/Users/hannibal/golang/src/github.com/skarlso/goprogressquest/mongodb.go	/^func (mdb MongoDBConnection) Save(ch Character) error {$/;"	func	line:18
+Load	/Users/hannibal/golang/src/github.com/skarlso/goprogressquest/mongodb.go	/^func (mdb MongoDBConnection) Load(ID string) (result Character, err error) {$/;"	func	line:28
+Update	/Users/hannibal/golang/src/github.com/skarlso/goprogressquest/mongodb.go	/^func (mdb MongoDBConnection) Update(ch Character) error {$/;"	func	line:37
+GetSession	/Users/hannibal/golang/src/github.com/skarlso/goprogressquest/mongodb.go	/^func (mdb *MongoDBConnection) GetSession() *mgo.Session {$/;"	func	line:58
