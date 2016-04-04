@@ -12,6 +12,39 @@ See it in action here:
 
 This will be an API which can be consumed by any client in a number of ways.
 
+Example usage
+-------------
+
+```bash
+curl -H "Content-type: application/json" -X POST -d '{"name":"awesome"}' http://localhost:8989/api/1/create
+curl -H "Content-type: application/json" -X POST -d '{"id":"03d67c263c27a453ef65b29e30334727333ccbcd"}' http://localhost:8989/api/1/start
+```
+
+This will start adventuring for character ```awesome```. Multiple characters can be sent adventuring. But after a while the log will be unreadable. Later, I might create a web front-end for this project which will be able to track multiple characters at once.
+
+And once you think your character adventured enough, simply call stop.
+
+```bash
+curl -H "Content-type: application/json" -X POST -d '{"id":"03d67c263c27a453ef65b29e30334727333ccbcd"}' http://localhost:8989/api/1/stop
+```
+
+Installing
+==========
+
+GoProgressQuest uses mongodb for it's back-end storage. The storage medium is interfaced, so any kind of database can be plugged in and used if you implement these three functions:
+
+```go
+// Storage defines a storage medium. It could be anything that implements this interface.
+type Storage interface {
+	Save(Character) error
+	Load(ID string) (Character, error)
+	Update(Character) error
+}
+```
+
+API
+===
+
 API Version is 1
 ----------------
 
