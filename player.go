@@ -104,7 +104,7 @@ func (c *Character) Attack(e Enemy) {
 	if playerDamage <= 0 {
 		playerDamage = 1
 	}
-	enemyDamage := e.Damage - (c.Body.Armor.Armor + c.Body.Shield.Armor + c.Body.LRing.Armor + c.Body.RRing.Armor)
+	enemyDamage := e.Damage - (c.Body.Head.Armor + c.Body.Armor.Armor + c.Body.Shield.Armor + c.Body.LRing.Armor + c.Body.RRing.Armor)
 	if enemyDamage <= 0 {
 		enemyDamage = 1
 	}
