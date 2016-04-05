@@ -117,6 +117,7 @@ func (c *Character) Attack(e Enemy) {
 		log.Println("Player won!")
 		color.Unset()
 		c.CurrentXp += e.Xp
+		displayProgressBar(c.CurrentXp, c.NextLevelXp)
 		c.Inventory.Items = append(c.Inventory.Items, e.Items...)
 		mdb.Update(*c)
 		return
@@ -125,6 +126,27 @@ func (c *Character) Attack(e Enemy) {
 	log.Println("Enemy won. Player has fled with hp: ", c.Hp)
 	color.Unset()
 	mdb.Update(*c)
+}
+
+// displayProgressBar displays a bar representing how much is left to for the character
+// to level up.
+func displayProgressBar(currXp, nextXp int) {
+	progress := "Progress: |"
+	top := 100
+	dots := top - (currXp / (nextXp / 100))
+	hashes := top - dots
+	percentage := hashes
+	for i := 0; i < top; i++ {
+		if hashes > 0 {
+			progress += "#"
+			hashes--
+		} else if dots > 0 {
+			progress += "."
+			dots--
+		}
+	}
+	progress += "|"
+	log.Printf("Progress: %s; Percentage: %d%%", progress, percentage)
 }
 
 // checkForBetterItems checks the players inventory for better items to wear.
