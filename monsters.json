@@ -5,7 +5,8 @@
 		"race": 1,
 		"cast": 1,
 		"items": [{
-			"id": 1
+			"id": 1,
+			"chance": 100
 		}],
 		"gold": 1,
 		"rare": 10,
@@ -18,7 +19,8 @@
 		"race": 1,
 		"cast": 1,
 		"items": [{
-			"id": 10
+			"id": 10,
+			"chance": 50
 		}],
 		"gold": 100000000,
 		"rare": 1,
@@ -31,9 +33,11 @@
 		"race": 2,
 		"cast": 3,
 		"items": [{
-			"id": 5
+			"id": 5,
+			"chance": 100
 		}, {
-			"id": 4
+			"id": 4,
+			"chance": 20
 		}],
 		"gold": 6,
 		"rare": 5,
@@ -46,7 +50,8 @@
 		"race": 2,
 		"cast": 3,
 		"items": [{
-			"id": 5
+			"id": 5,
+			"chance": 100
 		}, {
 			"id": 4
 		}],
@@ -61,9 +66,11 @@
 		"race": 2,
 		"cast": 3,
 		"items": [{
-			"id": 5
+			"id": 5,
+			"chance": 10
 		}, {
-			"id": 4
+			"id": 4,
+			"chance": 1
 		}],
 		"gold": 6,
 		"rare": 5,
