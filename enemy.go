@@ -48,8 +48,8 @@ func SpawnEnemy(c Character) Enemy {
 
 // MonsterItem is an item in the monsters.json file.
 type MonsterItem struct {
-	ID     int    `json:"id"`
-	Chance string `json:"chance"`
+	ID     int `json:"id"`
+	Chance int `json:"chance"`
 }
 
 // Monster is a monster from the monsters.json file.
