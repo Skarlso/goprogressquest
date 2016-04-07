@@ -2,6 +2,8 @@ package main
 
 import (
 	"log"
+	"math/rand"
+	"time"
 
 	"github.com/fatih/color"
 )
@@ -14,6 +16,7 @@ type Item struct {
 	Weight int    `json:"weight"`
 	Armor  int    `json:"armor"`
 	Value  int    `json:"value"`
+	Chance int    `json:"chance"`
 }
 
 // Inventory holds an endless number of Items
@@ -118,7 +121,7 @@ func (c *Character) Attack(e Enemy) {
 		color.Unset()
 		c.CurrentXp += e.Xp
 		displayProgressBar(c.CurrentXp, c.NextLevelXp)
-		c.Inventory.Items = append(c.Inventory.Items, e.Items...)
+		c.avardItems(e)
 		mdb.Update(*c)
 		return
 	}
@@ -126,6 +129,16 @@ func (c *Character) Attack(e Enemy) {
 	log.Println("Enemy won. Player has fled with hp: ", c.Hp)
 	color.Unset()
 	mdb.Update(*c)
+}
+
+func (c *Character) avardItems(e Enemy) {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	for _, v := range e.Items {
+		ch := r.Intn(100) + 1
+		if ch <= v.Chance {
+			c.Inventory.Items = append(c.Inventory.Items, v)
+		}
+	}
 }
 
 // displayProgressBar displays a bar representing how much is left to for the character

@@ -115,6 +115,8 @@ type Items struct {
 
 // loadItemsToMap will load all the items into a map so they can be easily selected.
 func loadItemsToMap() (itemsMap map[int]Item) {
+	// TODO: Rather then loading it from a file everytime, do a lookup / per item from
+	// the db, or some other medium that would be faster.
 	i := Items{}
 	itemsMap = make(map[int]Item)
 	file, err := os.Open("items.json")
