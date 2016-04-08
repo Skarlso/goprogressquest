@@ -131,6 +131,7 @@ func (c *Character) Attack(e Enemy) {
 	mdb.Update(*c)
 }
 
+// avardItems avards the items from a monster based on occurrence chance.
 func (c *Character) avardItems(e Enemy) {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	for _, v := range e.Items {
