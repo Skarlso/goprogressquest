@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -16,6 +18,9 @@ type MongoDBConnection struct {
 func (mdb MongoDBConnection) Save(ch Character) error {
 	mdb.session = mdb.GetSession()
 	defer mdb.session.Close()
+	if _, err := mdb.Load(ch.ID); err == nil {
+		return fmt.Errorf("Character already exists!")
+	}
 	c := mdb.session.DB("adventure").C("characters")
 	err := c.Insert(ch)
 	return err
