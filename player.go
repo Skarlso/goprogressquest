@@ -121,7 +121,7 @@ func (c *Character) Attack(e Enemy) {
 		color.Unset()
 		c.CurrentXp += e.Xp
 		displayProgressBar(c.CurrentXp, c.NextLevelXp)
-		c.avardItems(e)
+		c.awardItems(e)
 		mdb.Update(*c)
 		return
 	}
@@ -131,8 +131,8 @@ func (c *Character) Attack(e Enemy) {
 	mdb.Update(*c)
 }
 
-// avardItems avards the items from a monster based on occurrence chance.
-func (c *Character) avardItems(e Enemy) {
+// awardItems awards the items from a monster based on occurrence chance.
+func (c *Character) awardItems(e Enemy) {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	for _, v := range e.Items {
 		ch := r.Intn(100) + 1

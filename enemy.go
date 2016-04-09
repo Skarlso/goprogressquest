@@ -42,7 +42,7 @@ func SpawnEnemy(c Character) Enemy {
 	m.initializeStatsFromJSON()
 	m.Hp = calculateEnemyHp(c.MaxHp)
 	m.Level = calculateEnemyLevel(c.Level)
-	m.Xp = calculateEnemyXpAvard(c.Level, m.Xp)
+	m.Xp = calculateEnemyXpaward(c.Level, m.Xp)
 	return m
 }
 
@@ -173,11 +173,11 @@ func calculateEnemyLevel(playerLevel int) int {
 	return level
 }
 
-// calculateEnemyXpAvard currently it just multiplies the base xp of a monsters
+// calculateEnemyXpaward currently it just multiplies the base xp of a monsters
 // by 30% of players level.
 // Later this will be a graded system with Challenge Rating for monsters based on
 // RarenessLevel, Gold, Xp, HP.
-func calculateEnemyXpAvard(playerLevel, initialMonsterXp int) int {
+func calculateEnemyXpaward(playerLevel, initialMonsterXp int) int {
 	multiplier := float64(playerLevel) * 0.3
 	newXp := int(float64(initialMonsterXp)*multiplier) + initialMonsterXp
 
