@@ -100,10 +100,9 @@ func (e *Enemy) initializeStatsFromJSON() {
 	e.Armor = m.Monster[index].Armor
 	e.Damage = m.Monster[index].Damage
 
-	allItemsMap := loadItemsToMap()
 	var monsterItems []Item
 	for _, i := range m.Monster[index].Items {
-		monsterItems = append(monsterItems, allItemsMap[i.ID])
+		monsterItems = append(monsterItems, ItemsMap[i.ID])
 	}
 	e.Items = monsterItems
 }
@@ -111,31 +110,6 @@ func (e *Enemy) initializeStatsFromJSON() {
 // Items is a collection of all the items from the items file.
 type Items struct {
 	Items []Item `json:"items"`
-}
-
-// loadItemsToMap will load all the items into a map so they can be easily selected.
-func loadItemsToMap() (itemsMap map[int]Item) {
-	// TODO: Rather then loading it from a file everytime, do a lookup / per item from
-	// the db, or some other medium that would be faster.
-	i := Items{}
-	itemsMap = make(map[int]Item)
-	file, err := os.Open("items.json")
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
-	data, _ := ioutil.ReadAll(file)
-
-	err = json.Unmarshal(data, &i)
-	if err != nil {
-		panic(err)
-	}
-
-	for _, v := range i.Items {
-		itemsMap[v.ID] = v
-	}
-
-	return
 }
 
 // calculateEnemyHp calculates eveny hp.

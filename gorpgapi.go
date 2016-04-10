@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,10 +18,36 @@ const APIBASE = "api/" + APIVERSION
 var mdb Storage
 var config Config
 
+// ItemsMap contains all the items from items.json file
+var ItemsMap = make(map[int]Item)
+
 //Config global configuration of the application
 type Config struct {
 	Storage string `json:"Storage"`
 	DBURL   string `json:"DBURL"`
+}
+
+// loadItemsToMap will load all the items into a map so they can be easily selected.
+func loadItemsToMap() (itemsMap map[int]Item) {
+	i := Items{}
+	itemsMap = make(map[int]Item)
+	file, err := os.Open("items.json")
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+	data, _ := ioutil.ReadAll(file)
+
+	err = json.Unmarshal(data, &i)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, v := range i.Items {
+		ItemsMap[v.ID] = v
+	}
+
+	return
 }
 
 func getConfiguration() (c Config) {
@@ -38,13 +65,14 @@ func getConfiguration() (c Config) {
 
 func init() {
 	config := getConfiguration()
-
 	switch config.Storage {
 	case "mongodb":
 		mdb = MongoDBConnection{}
 	case "test":
 		mdb = TestDB{}
 	}
+
+	loadItemsToMap()
 }
 
 // The main function which starts the rpg
