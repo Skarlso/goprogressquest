@@ -17,7 +17,7 @@ Example usage
 
 ```bash
 curl -H "Content-type: application/json" -X POST -d '{"name":"awesome"}' http://localhost:8989/api/1/create
-curl -H "Content-type: application/json" -X POST -d '{"id":"03d67c263c27a453ef65b29e30334727333ccbcd"}' http://localhost:8989/api/1/start
+curl -H "Content-type: application/json" -X POST -d '{"name":"awesome"}' http://localhost:8989/api/1/start
 ```
 
 This will start adventuring for character ```awesome```. Multiple characters can be sent adventuring. But after a while the log will be unreadable. Later, I might create a web front-end for this project which will be able to track multiple characters at once.
@@ -25,7 +25,7 @@ This will start adventuring for character ```awesome```. Multiple characters can
 And once you think your character adventured enough, simply call stop.
 
 ```bash
-curl -H "Content-type: application/json" -X POST -d '{"id":"03d67c263c27a453ef65b29e30334727333ccbcd"}' http://localhost:8989/api/1/stop
+curl -H "Content-type: application/json" -X POST -d '{"name":"awesome"}' http://localhost:8989/api/1/stop
 ```
 
 Installing
@@ -78,7 +78,7 @@ POST:
 Return:
 ```json
 {
-    "id":"103b922810b1fac97da1bad872618477"
+    "name":"MyAwesomeCharacterName"
 }
 ```
 
@@ -106,7 +106,7 @@ Adventuring related
 ```json
 POST:
 {
-    "id":"03d67c263c27a453ef65b29e30334727333ccbcd"
+    "name":"MyAwesomeCharacterName"
 }
 ```
 Return:
@@ -123,7 +123,7 @@ Return:
 ```json
 POST:
 {
-    "id":"03d67c263c27a453ef65b29e30334727333ccbcd"
+    "name":"MyAwesomeCharacterName"
 }
 ```
 Return:
