@@ -30,3 +30,9 @@ func TestGetConfiguration(t *testing.T) {
 
 	assert.NotEmpty(t, c)
 }
+
+func TestLoadingItemsOnStartup(t *testing.T) {
+	loadItemsToMap()
+
+	assert.NotEmpty(t, ItemsMap)
+}

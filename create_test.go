@@ -70,7 +70,7 @@ func TestMarshallErrorReturnsProperErrorMessage(t *testing.T) {
 func TestLoadingACharacterWhichWasNotCreated(t *testing.T) {
 	mdb = TestDB{}
 	router := gin.New()
-	router.GET("/"+APIBASE+"/load/:id", loadCharacter)
+	router.GET("/"+APIBASE+"/load/:name", loadCharacter)
 
 	req, _ := http.NewRequest("GET", "/"+APIBASE+"/load/not_found", nil)
 	req.Header.Set("Content-type", "application/json")
@@ -82,7 +82,7 @@ func TestLoadingACharacterWhichWasNotCreated(t *testing.T) {
 func TestLoadingCharacter(t *testing.T) {
 	mdb = TestDB{}
 	router := gin.New()
-	router.GET("/"+APIBASE+"/load/:id", loadCharacter)
+	router.GET("/"+APIBASE+"/load/:name", loadCharacter)
 
 	expectedCharacter := Character{}
 	expectedCharacter.ID = "asdf"

@@ -53,11 +53,11 @@ func create(c *gin.Context) {
 
 func loadCharacter(c *gin.Context) {
 
-	charID := c.Param("id")
+	charName := c.Param("name")
 	var resultCharacter Character
-	log.Println("Looking for character with ID:", charID)
+	log.Println("Looking for character with ID:", charName)
 
-	resultCharacter, err := mdb.Load(charID)
+	resultCharacter, err := mdb.Load(charName)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{"Error occured while loading character:" + err.Error()})
 		return

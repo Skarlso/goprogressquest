@@ -82,7 +82,7 @@ func main() {
 	{
 		v1.GET("/", index)
 		v1.POST("/create", create)
-		v1.GET("/load/:id", loadCharacter)
+		v1.GET("/load/:name", loadCharacter)
 		v1.POST("/start", startAdventure)
 		v1.POST("/stop", stopAdventure)
 	}

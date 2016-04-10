@@ -17,11 +17,11 @@ func (tdb TestDB) Save(ch Character) error {
 }
 
 // Load will load the player using mongodb as a storage medium
-func (tdb TestDB) Load(ID string) (result Character, err error) {
-	if ID == "not_found" {
+func (tdb TestDB) Load(Name string) (result Character, err error) {
+	if Name == "not_found" {
 		return Character{}, fmt.Errorf("not found")
 	}
-	return Character{ID: ID, Name: ID}, nil
+	return Character{ID: "asdf", Name: Name}, nil
 }
 
 // Update update a character

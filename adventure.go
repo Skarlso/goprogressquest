@@ -23,7 +23,7 @@ var adventurersOnQuest = AdventurerOnQuest{m: make(map[string]bool, 0)}
 func startAdventure(c *gin.Context) {
 
 	var adventurer struct {
-		ID string `json:"id"`
+		Name string `json:"name"`
 	}
 
 	if err := c.BindJSON(&adventurer); err != nil {
@@ -31,14 +31,14 @@ func startAdventure(c *gin.Context) {
 		return
 	}
 
-	char, err := mdb.Load(adventurer.ID)
+	char, err := mdb.Load(adventurer.Name)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{"Error occured while loading character:" + err.Error()})
 		return
 	}
 
 	adventurersOnQuest.RLock()
-	adv := adventurersOnQuest.m[char.ID]
+	adv := adventurersOnQuest.m[char.Name]
 	adventurersOnQuest.RUnlock()
 
 	if adv {
@@ -46,19 +46,19 @@ func startAdventure(c *gin.Context) {
 		return
 	}
 
-	go adventuring(char.ID, char.Name)
+	go adventuring(char.Name)
 
 	m := Message{}
 	m.Message = "Started adventuring for character: " + char.Name
 	c.JSON(http.StatusOK, m)
 }
 
-func adventuring(id string, name string) {
+func adventuring(name string) {
 	adventurersOnQuest.Lock()
-	adventurersOnQuest.m[id] = true
+	adventurersOnQuest.m[name] = true
 	adventurersOnQuest.Unlock()
 	stop := false
-	player, err := mdb.Load(id)
+	player, err := mdb.Load(name)
 	if err != nil {
 		panic(err)
 	}
@@ -72,7 +72,7 @@ func adventuring(id string, name string) {
 		if stop {
 			log.Println("Stopping adventuring for:", name)
 			adventurersOnQuest.Lock()
-			adventurersOnQuest.m[id] = false
+			adventurersOnQuest.m[name] = false
 			adventurersOnQuest.Unlock()
 			break
 		}
@@ -117,7 +117,7 @@ func invetoryIsOverLimit(c Character) bool {
 func stopAdventure(c *gin.Context) {
 	//signal channel to stop fight.
 	var adventurer struct {
-		ID string `json:"id"`
+		Name string `json:"name"`
 	}
 
 	if err := c.BindJSON(&adventurer); err != nil {
@@ -125,7 +125,7 @@ func stopAdventure(c *gin.Context) {
 		return
 	}
 
-	char, err := mdb.Load(adventurer.ID)
+	char, err := mdb.Load(adventurer.Name)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{"Error occured while loading character:" + err.Error()})
 		return
@@ -134,7 +134,7 @@ func stopAdventure(c *gin.Context) {
 	log.Println("Loaded adventurer:", char)
 
 	adventurersOnQuest.RLock()
-	adv := adventurersOnQuest.m[char.ID]
+	adv := adventurersOnQuest.m[char.Name]
 	adventurersOnQuest.RUnlock()
 	if !adv {
 		c.JSON(http.StatusBadRequest, ErrorResponse{"Error occured, adventurer is not adventuring!"})

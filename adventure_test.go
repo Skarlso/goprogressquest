@@ -15,7 +15,7 @@ func TestAdventureReturningErrorOnPlayerWhichIsNotCreatedOnStart(t *testing.T) {
 	router := gin.New()
 	router.POST("/"+APIBASE+"/start", startAdventure)
 
-	req, _ := http.NewRequest("POST", "/"+APIBASE+"/start", strings.NewReader("{\"id\":\"not_found\"}"))
+	req, _ := http.NewRequest("POST", "/"+APIBASE+"/start", strings.NewReader("{\"name\":\"not_found\"}"))
 	req.Header.Add("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
@@ -28,7 +28,7 @@ func TestAdventureReturningErrorOnPlayerWhichIsNotCreatedOnStop(t *testing.T) {
 	router := gin.New()
 	router.POST("/"+APIBASE+"/stop", stopAdventure)
 
-	req, _ := http.NewRequest("POST", "/"+APIBASE+"/stop", strings.NewReader("{\"id\":\"not_found\"}"))
+	req, _ := http.NewRequest("POST", "/"+APIBASE+"/stop", strings.NewReader("{\"name\":\"not_found\"}"))
 	req.Header.Add("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
@@ -44,7 +44,7 @@ func TestStartingAdventuringForPlayerWhoIsAdventuring(t *testing.T) {
 	router := gin.New()
 	router.POST("/"+APIBASE+"/start", startAdventure)
 
-	req, _ := http.NewRequest("POST", "/"+APIBASE+"/start", strings.NewReader("{\"id\":\"onquest\"}"))
+	req, _ := http.NewRequest("POST", "/"+APIBASE+"/start", strings.NewReader("{\"name\":\"onquest\"}"))
 	req.Header.Add("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
@@ -70,7 +70,7 @@ func TestStopAdventuringForACharacterWhichIsNotAdventuring(t *testing.T) {
 	router := gin.New()
 	router.POST("/"+APIBASE+"/stop", stopAdventure)
 
-	req, _ := http.NewRequest("POST", "/"+APIBASE+"/stop", strings.NewReader("{\"id\":\"notonquest\"}"))
+	req, _ := http.NewRequest("POST", "/"+APIBASE+"/stop", strings.NewReader("{\"name\":\"notonquest\"}"))
 	req.Header.Add("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
@@ -96,7 +96,7 @@ func TestStartAdventuringForExistingPlayer(t *testing.T) {
 	router := gin.New()
 	router.POST("/"+APIBASE+"/start", startAdventure)
 
-	req, _ := http.NewRequest("POST", "/"+APIBASE+"/start", strings.NewReader("{\"id\":\"quester\"}"))
+	req, _ := http.NewRequest("POST", "/"+APIBASE+"/start", strings.NewReader("{\"name\":\"quester\"}"))
 	req.Header.Add("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
@@ -111,7 +111,7 @@ func TestStopAdventuringForAdventurerWhoIsAdventuring(t *testing.T) {
 	adventurersOnQuest.m["quester"] = true
 	adventurersOnQuest.Unlock()
 	router.POST("/"+APIBASE+"/stop", stopAdventure)
-	req, _ := http.NewRequest("POST", "/"+APIBASE+"/stop", strings.NewReader("{\"id\":\"quester\"}"))
+	req, _ := http.NewRequest("POST", "/"+APIBASE+"/stop", strings.NewReader("{\"name\":\"quester\"}"))
 	req.Header.Add("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
@@ -123,7 +123,7 @@ func TestStopAdventuringForAdventurerWhoIsAdventuring(t *testing.T) {
 
 func TestAdventuring(t *testing.T) {
 	t.SkipNow()
-	go adventuring("id", "name")
+	go adventuring("name")
 	// fmt.Println(adventurersOnQuest)
 	// adv := adventurersOnQuest["id"]
 	adventureSignal <- true
