@@ -19,7 +19,7 @@ var mdb Storage
 var config Config
 
 // ItemsMap contains all the items from items.json file
-var ItemsMap = make(map[int]Item)
+var ItemsMap map[int]Item
 
 //Config global configuration of the application
 type Config struct {
@@ -28,9 +28,9 @@ type Config struct {
 }
 
 // loadItemsToMap will load all the items into a map so they can be easily selected.
-func loadItemsToMap() (itemsMap map[int]Item) {
+func loadItemsToMap() {
+	ItemsMap = make(map[int]Item)
 	i := Items{}
-	itemsMap = make(map[int]Item)
 	file, err := os.Open("items.json")
 	if err != nil {
 		panic(err)
