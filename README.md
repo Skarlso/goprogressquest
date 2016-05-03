@@ -12,6 +12,13 @@ See it in action here:
 
 This will be an API which can be consumed by any client in a number of ways.
 
+CLI Front-End for Go Progress Quest
+-----------------------------------
+
+This is a very basic, semi interactive CLI front-end for this project: 
+
+[GoProgressQuest Front-End](https://github.com/Skarlso/goprogressfrontend)
+
 Example usage
 -------------
 
