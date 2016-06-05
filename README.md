@@ -15,7 +15,7 @@ This will be an API which can be consumed by any client in a number of ways.
 CLI Front-End for Go Progress Quest
 -----------------------------------
 
-This is a very basic, semi interactive CLI front-end for this project: 
+This is a very basic, semi interactive CLI front-end for this project:
 
 [GoProgressQuest Front-End](https://github.com/Skarlso/goprogressfrontend)
 
@@ -148,3 +148,8 @@ go build
 ```
 
 Currently the project is simple enough so that no Makefile is needed for this process.
+
+Dependencies
+------------
+
+This project uses [Glide](https://github.com/Masterminds/glide) as its package handler. Please add vendor and glide.lock to your ignore files. The project should always work with the latest versions.
