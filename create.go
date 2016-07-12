@@ -3,7 +3,7 @@ package main
 import (
 	// "crypto/sha1"
 	// "encoding/json"
-	"fmt"
+	// "fmt"
 	"io/ioutil"
 	"log"
 	"math/rand"
