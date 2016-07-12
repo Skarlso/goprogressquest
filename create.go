@@ -1,9 +1,9 @@
 package main
 
 import (
-	// "crypto/sha1"
-	// "encoding/json"
-	// "fmt"
+	"crypto/sha1"
+	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"math/rand"
