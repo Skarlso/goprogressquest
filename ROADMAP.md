@@ -4,7 +4,7 @@ Project Roadmap
 Testing
 -------
 
-Need more of it.
+* Need more of it.
 
 Tooling
 -------
@@ -20,4 +20,4 @@ Features
 Front-End
 ---------
 
-Need a simple way to depict what is happening. Suggestion is a simple GUI.
+* Need a simple way to depict what is happening. Suggestion is a simple GUI.
