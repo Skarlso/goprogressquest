@@ -113,7 +113,6 @@ type Items struct {
 }
 
 // calculateEnemyHp calculates eveny hp.
-// TODO: For now this is the same as level. Come up with something better!
 func calculateEnemyHp(playerHp int) int {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	limiter := int(float64(playerHp) * 0.2)

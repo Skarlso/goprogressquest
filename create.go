@@ -13,16 +13,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Races is an acumulater for races defined in races.json.
-type Races struct {
-	Races []Race `json:"races"`
-}
-
-// Casts is an acumulater for casts in casts.json.
-type Casts struct {
-	Casts []Cast `json:"casts"`
-}
-
 // create handling the creation of a new character
 // curl -H "Content-Type: application/json" -X POST -d '{"name":"asdf"}' http://localhost:8989
 func create(c *gin.Context) {
@@ -106,30 +96,27 @@ func createCharacter(id, name string) Character {
 }
 
 func selectRandomRace() int {
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	dat, err := ioutil.ReadFile("races.json")
-	if err != nil {
-		panic(err)
-	}
-	races := Races{}
-	if err = json.Unmarshal(dat, &races); err != nil {
-		panic(err)
-	}
+	return selectRandomAffiliation("races")
 
-	return races.Races[r.Intn(len(races.Races)-1)].ID
 }
 
-//TODO: There is clearly duplication here...
 func selectRandomCast() int {
+	return selectRandomAffiliation("casts")
+}
+
+func selectRandomAffiliation(t string) int {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	dat, err := ioutil.ReadFile("casts.json")
+	dat, err := ioutil.ReadFile(t + ".json")
 	if err != nil {
 		panic(err)
 	}
-	casts := Casts{}
-	if err = json.Unmarshal(dat, &casts); err != nil {
+	var m map[string]interface{}
+	if err = json.Unmarshal(dat, &m); err != nil {
 		panic(err)
 	}
 
-	return casts.Casts[r.Intn(len(casts.Casts)-1)].ID
+	log.Println(m)
+	elements := m[t].([]interface{})
+	elem := elements[r.Intn(len(elements)-1)]
+	return int(elem.(map[string]interface{})["id"].(float64))
 }
