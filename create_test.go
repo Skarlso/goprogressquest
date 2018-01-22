@@ -51,7 +51,7 @@ func TestSavingErrorReturnsProperErrorMessage(t *testing.T) {
 	req.Header.Set("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
-	assert.Equal(t, "{\"error\":\"error while saving character:error\"}\n", resp.Body.String())
+	assert.Equal(t, "{\"error\":\"error while saving character:error\"}", resp.Body.String())
 }
 
 func TestMarshallErrorReturnsProperErrorMessage(t *testing.T) {
@@ -64,7 +64,7 @@ func TestMarshallErrorReturnsProperErrorMessage(t *testing.T) {
 	req.Header.Set("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
-	assert.Equal(t, "{\"error\":\"error while binding newName:invalid character 'i' looking for beginning of value\"}\n", resp.Body.String())
+	assert.Equal(t, "{\"error\":\"error while binding newName:invalid character 'i' looking for beginning of value\"}", resp.Body.String())
 }
 
 func TestLoadingACharacterWhichWasNotCreated(t *testing.T) {
@@ -76,7 +76,7 @@ func TestLoadingACharacterWhichWasNotCreated(t *testing.T) {
 	req.Header.Set("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
-	assert.Equal(t, "{\"error\":\"Error occured while loading character:not found\"}\n", resp.Body.String())
+	assert.Equal(t, "{\"error\":\"Error occured while loading character:not found\"}", resp.Body.String())
 }
 
 func TestLoadingCharacter(t *testing.T) {

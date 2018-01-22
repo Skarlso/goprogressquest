@@ -20,7 +20,7 @@ func TestAdventureReturningErrorOnPlayerWhichIsNotCreatedOnStart(t *testing.T) {
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
 
-	assert.Equal(t, "{\"error\":\"Error occured while loading character:not found\"}\n", resp.Body.String())
+	assert.Equal(t, "{\"error\":\"Error occured while loading character:not found\"}", resp.Body.String())
 }
 
 func TestAdventureReturningErrorOnPlayerWhichIsNotCreatedOnStop(t *testing.T) {
@@ -33,7 +33,7 @@ func TestAdventureReturningErrorOnPlayerWhichIsNotCreatedOnStop(t *testing.T) {
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
 
-	assert.Equal(t, "{\"error\":\"Error occured while loading character:not found\"}\n", resp.Body.String())
+	assert.Equal(t, "{\"error\":\"Error occured while loading character:not found\"}", resp.Body.String())
 }
 
 func TestStartingAdventuringForPlayerWhoIsAdventuring(t *testing.T) {
@@ -49,7 +49,7 @@ func TestStartingAdventuringForPlayerWhoIsAdventuring(t *testing.T) {
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
 
-	assert.Equal(t, "{\"error\":\"Error occured, adventurer is already adventuring!\"}\n", resp.Body.String())
+	assert.Equal(t, "{\"error\":\"Error occured, adventurer is already adventuring!\"}", resp.Body.String())
 }
 
 func TestErrorWhileBindingAdventurerOnStart(t *testing.T) {
@@ -62,7 +62,7 @@ func TestErrorWhileBindingAdventurerOnStart(t *testing.T) {
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
 
-	assert.Equal(t, "{\"error\":\"error while binding adventurer:invalid character 'i' looking for beginning of value\"}\n", resp.Body.String())
+	assert.Equal(t, "{\"error\":\"error while binding adventurer:invalid character 'i' looking for beginning of value\"}", resp.Body.String())
 }
 
 func TestStopAdventuringForACharacterWhichIsNotAdventuring(t *testing.T) {
@@ -75,7 +75,7 @@ func TestStopAdventuringForACharacterWhichIsNotAdventuring(t *testing.T) {
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
 
-	assert.Equal(t, "{\"error\":\"Error occured, adventurer is not adventuring!\"}\n", resp.Body.String())
+	assert.Equal(t, "{\"error\":\"Error occured, adventurer is not adventuring!\"}", resp.Body.String())
 }
 
 func TestStopAdventuringInvalidJSON(t *testing.T) {
@@ -88,7 +88,7 @@ func TestStopAdventuringInvalidJSON(t *testing.T) {
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
 
-	assert.Equal(t, "{\"error\":\"error while binding adventurer:invalid character 'i' looking for beginning of value\"}\n", resp.Body.String())
+	assert.Equal(t, "{\"error\":\"error while binding adventurer:invalid character 'i' looking for beginning of value\"}", resp.Body.String())
 }
 
 func TestStartAdventuringForExistingPlayer(t *testing.T) {
@@ -101,7 +101,7 @@ func TestStartAdventuringForExistingPlayer(t *testing.T) {
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
 
-	assert.Equal(t, "{\"message\":\"Started adventuring for character: quester\"}\n", resp.Body.String())
+	assert.Equal(t, "{\"message\":\"Started adventuring for character: quester\"}", resp.Body.String())
 }
 
 func TestStopAdventuringForAdventurerWhoIsAdventuring(t *testing.T) {
@@ -116,7 +116,7 @@ func TestStopAdventuringForAdventurerWhoIsAdventuring(t *testing.T) {
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
 
-	assert.Equal(t, "{\"message\":\"Stop adventuring for character: quester\"}\n", resp.Body.String())
+	assert.Equal(t, "{\"message\":\"Stop adventuring for character: quester\"}", resp.Body.String())
 	//Also assert that our adventureSignal was fired of
 	assert.Equal(t, 1, len(adventureSignal))
 }
