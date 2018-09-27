@@ -108,11 +108,13 @@ func selectRandomAffiliation(t string) int {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	dat, err := ioutil.ReadFile(t + ".json")
 	if err != nil {
-		panic(err)
+		log.Println("unable to load source file for affiliations. returning 0")
+		return 0
 	}
 	var m map[string]interface{}
 	if err = json.Unmarshal(dat, &m); err != nil {
-		panic(err)
+		log.Println("unable to unmarshal. returning 0")
+		return 0
 	}
 
 	log.Println(m)

@@ -1,7 +1,0 @@
-package: github.com/skarlso/goprogressquest
-import:
-- package: github.com/fatih/color
-- package: github.com/gin-gonic/gin
-- package: gopkg.in/mgo.v2
-  subpackages:
-  - bson

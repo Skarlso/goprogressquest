@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
@@ -62,7 +63,7 @@ func (mdb *MongoDBConnection) GetSession() *mgo.Session {
 	}
 	session, err := mgo.Dial("localhost")
 	if err != nil {
-		panic(err)
+		log.Fatal("could not get session to db: ", err)
 	}
 	session.SetMode(mgo.Monotonic, true)
 	return session

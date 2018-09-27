@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"sync"
@@ -60,7 +61,8 @@ func adventuring(name string) {
 	stop := false
 	player, err := mdb.Load(name)
 	if err != nil {
-		panic(err)
+		fmt.Println("could not load player... skipping adventure")
+		return
 	}
 
 	for {

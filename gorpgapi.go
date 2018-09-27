@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 
@@ -33,14 +34,14 @@ func loadItemsToMap() {
 	i := Items{}
 	file, err := os.Open("items.json")
 	if err != nil {
-		panic(err)
+		log.Fatal("couldn't open items.json file: ", err)
 	}
 	defer file.Close()
 	data, _ := ioutil.ReadAll(file)
 
 	err = json.Unmarshal(data, &i)
 	if err != nil {
-		panic(err)
+		log.Fatal("couldn't unmarshal items.json file: ", err)
 	}
 
 	for _, v := range i.Items {
@@ -53,11 +54,11 @@ func loadItemsToMap() {
 func getConfiguration() (c Config) {
 	dat, err := ioutil.ReadFile("config.json")
 	if err != nil {
-		panic(err)
+		log.Fatal("couldn't open config.json file: ", err)
 	}
 
 	if err = json.Unmarshal(dat, &c); err != nil {
-		panic(err)
+		log.Fatal("couldn't unmarshal config.json file: ", err)
 	}
 
 	return

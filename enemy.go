@@ -4,6 +4,7 @@ package main
 import (
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"math/rand"
 	"os"
 	"strconv"
@@ -78,14 +79,14 @@ func (e *Enemy) initializeStatsFromJSON() {
 
 	file, err := os.Open("monsters.json")
 	if err != nil {
-		panic(err)
+		log.Fatal("unable to load monsters.json file: ", err)
 	}
 	defer file.Close()
 	data, _ := ioutil.ReadAll(file)
 
 	err = json.Unmarshal(data, &m)
 	if err != nil {
-		panic(err)
+		log.Fatal("unable to unmarshal monsters.json file: ", err)
 	}
 
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
