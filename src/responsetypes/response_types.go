@@ -1,13 +1,8 @@
-package main
+package responsetypes
 
 //Message Basic Message format for greeting
 type Message struct {
 	Message string `json:"message"`
-}
-
-//NewCharacter The ID of a newly created character
-type NewCharacter struct {
-	CharacterID string `json:"id"`
 }
 
 //ErrorResponse A wrapped error response with proper message

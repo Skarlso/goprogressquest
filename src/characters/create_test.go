@@ -1,4 +1,4 @@
-package main
+package characters
 
 import (
 	"crypto/sha1"
@@ -14,17 +14,41 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCreateReturnsAnIdAndHash(t *testing.T) {
+// TestDB Encapsulates a connection to a database
+type TestDB struct {
+}
 
-	mdb = TestDB{}
+// Save will save a player using mongodb as a storage medium
+func (tdb TestDB) Save(ch Character) error {
+	if ch.Name == "save_error" {
+		return fmt.Errorf("error")
+	}
+	return nil
+}
+
+// Load will load the player using mongodb as a storage medium
+func (tdb TestDB) Load(Name string) (result Character, err error) {
+	if Name == "not_found" {
+		return Character{}, fmt.Errorf("not found")
+	}
+	return Character{ID: "asdf", Name: Name}, nil
+}
+
+// Update update a character
+func (tdb TestDB) Update(c Character) error {
+	return nil
+}
+
+func TestCreateReturnsAnIdAndHash(t *testing.T) {
+	DB = TestDB{}
 	router := gin.New()
-	router.POST("/"+APIBASE+"/create", create)
+	router.POST("/api/1/create", Create)
 
 	expectedCharacter := Character{}
 	expectedCharacter.ID = fmt.Sprintf("%x", sha1.Sum([]byte("asdf")))
 	expectedCharacter.Name = "asdf"
 
-	req, _ := http.NewRequest("POST", "/"+APIBASE+"/create", strings.NewReader("{\"name\":\"asdf\"}"))
+	req, _ := http.NewRequest("POST", "/api/1/create", strings.NewReader("{\"name\":\"asdf\"}"))
 	req.Header.Set("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
@@ -42,12 +66,11 @@ func TestCreateSameCharacterTwice(t *testing.T) {
 }
 
 func TestSavingErrorReturnsProperErrorMessage(t *testing.T) {
-
-	mdb = TestDB{}
+	DB = TestDB{}
 	router := gin.New()
-	router.POST("/"+APIBASE+"/create", create)
+	router.POST("/api/1/create", Create)
 
-	req, _ := http.NewRequest("POST", "/"+APIBASE+"/create", strings.NewReader("{\"name\":\"save_error\"}"))
+	req, _ := http.NewRequest("POST", "/api/1/create", strings.NewReader("{\"name\":\"save_error\"}"))
 	req.Header.Set("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
@@ -55,12 +78,11 @@ func TestSavingErrorReturnsProperErrorMessage(t *testing.T) {
 }
 
 func TestMarshallErrorReturnsProperErrorMessage(t *testing.T) {
-
-	mdb = TestDB{}
+	DB = TestDB{}
 	router := gin.New()
-	router.POST("/"+APIBASE+"/create", create)
+	router.POST("/api/1/create", Create)
 
-	req, _ := http.NewRequest("POST", "/"+APIBASE+"/create", strings.NewReader("invalidJSON"))
+	req, _ := http.NewRequest("POST", "/api/1/create", strings.NewReader("invalidJSON"))
 	req.Header.Set("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
@@ -68,11 +90,11 @@ func TestMarshallErrorReturnsProperErrorMessage(t *testing.T) {
 }
 
 func TestLoadingACharacterWhichWasNotCreated(t *testing.T) {
-	mdb = TestDB{}
+	DB = TestDB{}
 	router := gin.New()
-	router.GET("/"+APIBASE+"/load/:name", loadCharacter)
+	router.GET("/api/1/load/:name", LoadCharacter)
 
-	req, _ := http.NewRequest("GET", "/"+APIBASE+"/load/not_found", nil)
+	req, _ := http.NewRequest("GET", "/api/1/load/not_found", nil)
 	req.Header.Set("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
@@ -80,15 +102,15 @@ func TestLoadingACharacterWhichWasNotCreated(t *testing.T) {
 }
 
 func TestLoadingCharacter(t *testing.T) {
-	mdb = TestDB{}
+	DB = TestDB{}
 	router := gin.New()
-	router.GET("/"+APIBASE+"/load/:name", loadCharacter)
+	router.GET("/api/1/load/:name", LoadCharacter)
 
 	expectedCharacter := Character{}
 	expectedCharacter.ID = "asdf"
 	expectedCharacter.Name = "asdf"
 
-	req, _ := http.NewRequest("GET", "/"+APIBASE+"/load/asdf", nil)
+	req, _ := http.NewRequest("GET", "/api/1/load/asdf", nil)
 	req.Header.Set("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)

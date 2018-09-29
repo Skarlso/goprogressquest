@@ -24,15 +24,3 @@ func TestIndexReturningWelcomeMessage(t *testing.T) {
 func TestInvalidAPICallReturnsNotFound(t *testing.T) {
 	t.SkipNow()
 }
-
-func TestGetConfiguration(t *testing.T) {
-	c := getConfiguration()
-
-	assert.NotEmpty(t, c)
-}
-
-func TestLoadingItemsOnStartup(t *testing.T) {
-	loadItemsToMap()
-
-	assert.NotEmpty(t, ItemsMap)
-}

@@ -1,0 +1,18 @@
+{
+    "casts": [{
+        "name": "warrior",
+        "id": 1
+    },{
+        "name": "mage",
+        "id": 2
+    },{
+        "name": "rouge",
+        "id": 3
+    },{
+        "name": "wizzard",
+        "id": 4
+    },{
+        "name": "sorcerer",
+        "id": 5
+    }]
+}

@@ -1,4 +1,4 @@
-package main
+package characters
 
 import (
 	"fmt"
@@ -15,12 +15,23 @@ type MongoDBConnection struct {
 	session *mgo.Session
 }
 
+// DB Is a global Db session
+var DB Storage
+
+func init() {
+	DB = MongoDBConnection{}
+}
+
+// // Mdb is a global storage instance
+// // TODO: Refactor and remove this
+// var Mdb Storage
+
 // Save will save a player using mongodb as a storage medium
 func (mdb MongoDBConnection) Save(ch Character) error {
 	mdb.session = mdb.GetSession()
 	defer mdb.session.Close()
 	if _, err := mdb.Load(ch.Name); err == nil {
-		return fmt.Errorf("Character already exists!")
+		return fmt.Errorf("character already exists")
 	}
 	c := mdb.session.DB("adventure").C("characters")
 	err := c.Insert(ch)

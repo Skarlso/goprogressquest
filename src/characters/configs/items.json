@@ -1,0 +1,73 @@
+{
+	"items": [{
+		"name": "Basic Sword",
+		"id": 1,
+		"dmg": 1,
+		"weight": 1,
+		"armor": 0,
+		"value": 1
+	},{
+		"name": "Basic Axe",
+		"id": 2,
+		"dmg": 2,
+		"weight": 2,
+		"armor": 0,
+		"value": 2
+	},{
+		"name": "Basic Spear",
+		"id": 3,
+		"dmg": 3,
+		"weight": 3,
+		"armor": 0,
+		"value": 4
+	},{
+		"name": "Basic Halbard",
+		"id": 4,
+		"dmg": 4,
+		"weight": 4,
+		"armor": 0,
+		"value": 5
+	},{
+		"name": "Basic Shield",
+		"id": 5,
+		"dmg": 0,
+		"weight": 1,
+		"armor": 1,
+		"value": 1
+	},{
+		"name": "Basic Towershield",
+		"id": 6,
+		"dmg": 0,
+		"weight": 5,
+		"armor": 4,
+		"value": 5
+	},{
+		"name": "Basic Greatshield",
+		"id": 7,
+		"dmg": 0,
+		"weight": 10,
+		"armor": 10,
+		"value": 10
+	},{
+		"name": "Golden Avanger",
+		"id": 8,
+		"dmg": 10,
+		"weight": 5,
+		"armor": 0,
+		"value": 10
+	},{
+		"name": "Flu",
+		"id": 9,
+		"dmg": 20,
+		"weight": 0,
+		"armor": 0,
+		"value": 10
+	},{
+		"name": "Antibiotics",
+		"id": 10,
+		"dmg": 30,
+		"weight": 0,
+		"armor": 0,
+		"value": 100
+	}]
+}

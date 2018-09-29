@@ -1,0 +1,27 @@
+{
+    "races": [{
+        "name": "elf",
+        "id": 1
+    },{
+        "name": "human",
+        "id": 2
+    },{
+        "name": "dwarf",
+        "id": 3
+    },{
+        "name": "hobbit",
+        "id": 4
+    },{
+        "name": "goblin",
+        "id": 5
+    },{
+        "name": "celebrity",
+        "id": 6
+    },{
+        "name": "virus",
+        "id": 7
+    },{
+        "name": "troll",
+        "id": 8
+    }]
+}

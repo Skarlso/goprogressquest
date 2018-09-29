@@ -1,4 +1,4 @@
-package main
+package characters
 
 import (
 	"log"
@@ -7,6 +7,25 @@ import (
 
 	"github.com/fatih/color"
 )
+
+const PointsPerLevel = 20
+
+// Character is a player character.
+type Character struct {
+	ID          string    `json:"id"`
+	Inventory   Inventory `json:"inventory"`
+	Body        Body      `json:"body"`
+	Name        string    `json:"name"`
+	Stats       Stats     `json:"stats"`
+	Hp          int       `json:"hp"`
+	MaxHp       int       `json:"maxhp"`
+	CurrentXp   int       `json:"currentxp"`
+	NextLevelXp int       `json:"nextlevelxp"`
+	Gold        int       `json:"gold"`
+	Level       int       `json:"level"`
+	Race        int       `json:"race"`
+	Cast        int       `json:"cast"`
+}
 
 // Item a representation of an Item and it's properties.
 type Item struct {
@@ -58,30 +77,13 @@ type Race struct {
 	ID   int    `json:"id"`
 }
 
-// Character is a player character.
-type Character struct {
-	ID          string    `json:"id"`
-	Inventory   Inventory `json:"inventory"`
-	Body        Body      `json:"body"`
-	Name        string    `json:"name"`
-	Stats       Stats     `json:"stats"`
-	Hp          int       `json:"hp"`
-	MaxHp       int       `json:"maxhp"`
-	CurrentXp   int       `json:"currentxp"`
-	NextLevelXp int       `json:"nextlevelxp"`
-	Gold        int       `json:"gold"`
-	Level       int       `json:"level"`
-	Race        int       `json:"race"`
-	Cast        int       `json:"cast"`
-}
-
 // Rest will Replenish Health.
 func (c *Character) Rest() {
 	c.Hp = c.MaxHp
 	color.Set(color.FgBlue)
 	log.Println("Player is fully rested.")
 	color.Unset()
-	mdb.Update(*c)
+	DB.Update(*c)
 }
 
 // SellItems will clear the inventory.
@@ -94,7 +96,7 @@ func (c *Character) SellItems() {
 	log.Printf("Player has sold all items. Current gold is: %s\n", yellow(c.Gold))
 	color.Unset()
 	c.Inventory.Items = []Item{}
-	mdb.Update(*c)
+	DB.Update(*c)
 }
 
 // Attack an enemy during an encounter.
@@ -122,13 +124,56 @@ func (c *Character) Attack(e Enemy) {
 		c.CurrentXp += e.Xp
 		displayProgressBar(c.CurrentXp, c.NextLevelXp)
 		c.awardItems(e)
-		mdb.Update(*c)
+		DB.Update(*c)
 		return
 	}
 	color.Set(color.FgHiRed)
 	log.Println("Enemy won. Player has fled with hp: ", c.Hp)
 	color.Unset()
-	mdb.Update(*c)
+	DB.Update(*c)
+}
+
+// LevelUp Level up a character.
+func (c *Character) LevelUp() {
+	// Apply basic character changes first.
+	color.Set(color.FgMagenta, color.Bold)
+	log.Println("************Player reached a new level!************")
+	color.Unset()
+	stats := distributePoints()
+	c.Stats.Agility += stats[0]
+	c.Stats.Intelligence += stats[1]
+	c.Stats.Luck += stats[2]
+	c.Stats.Perception += stats[3]
+	c.Stats.Strenght += stats[4]
+	c.Stats.Constitution += stats[5]
+	c.MaxHp += 50
+	c.Hp = c.MaxHp
+	c.CurrentXp = 0
+
+	// Apply calculated changes next.
+	c.MaxHp += c.MaxHp / c.Stats.Constitution
+	c.NextLevelXp += c.Level * 1000
+	c.Level++
+	DB.Update(*c)
+	green := color.New(color.FgGreen).SprintFunc()
+	log.Printf("Current level is:%s\n", green(c.Level))
+}
+
+func distributePoints() []int {
+	currentPoints := PointsPerLevel
+	var stats []int
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+
+	for i := 6; i >= 1; i-- {
+		stat := r.Intn(currentPoints-i) + 1
+		stats = append(stats, stat)
+		currentPoints -= stat
+	}
+	if currentPoints > 0 {
+		stats[len(stats)-1] += currentPoints
+	}
+
+	return stats
 }
 
 // awardItems awards the items from a monster based on occurrence chance.

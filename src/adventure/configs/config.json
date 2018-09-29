@@ -1,0 +1,4 @@
+{
+    "Storage": "mongodb",
+    "DBURL": "localhost"
+}

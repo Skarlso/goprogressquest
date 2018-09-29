@@ -1,4 +1,4 @@
-package main
+package adventure
 
 const (
 	//DISCOVERY Find something. Item, money.

@@ -1,5 +1,4 @@
-//enemy a package discribing the properties of an enemy
-package main
+package characters
 
 import (
 	"encoding/json"
@@ -77,7 +76,7 @@ func (e *Enemy) initializeStatsFromJSON() {
 
 	m := Monsters{}
 
-	file, err := os.Open("monsters.json")
+	file, err := os.Open("./configs/monsters.json")
 	if err != nil {
 		log.Fatal("unable to load monsters.json file: ", err)
 	}

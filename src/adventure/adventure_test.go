@@ -1,21 +1,48 @@
-package main
+package adventure
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
 
+	"github.com/Skarlso/goprogressquest/src/characters"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestAdventureReturningErrorOnPlayerWhichIsNotCreatedOnStart(t *testing.T) {
-	mdb = TestDB{}
-	router := gin.New()
-	router.POST("/"+APIBASE+"/start", startAdventure)
+// TestDB Encapsulates a connection to a database
+type TestDB struct {
+}
 
-	req, _ := http.NewRequest("POST", "/"+APIBASE+"/start", strings.NewReader("{\"name\":\"not_found\"}"))
+// Save will save a player using mongodb as a storage medium
+func (tdb TestDB) Save(ch characters.Character) error {
+	if ch.Name == "save_error" {
+		return fmt.Errorf("error")
+	}
+	return nil
+}
+
+// Load will load the player using mongodb as a storage medium
+func (tdb TestDB) Load(Name string) (result characters.Character, err error) {
+	if Name == "not_found" {
+		return characters.Character{}, fmt.Errorf("not found")
+	}
+	return characters.Character{ID: "asdf", Name: Name}, nil
+}
+
+// Update update a character
+func (tdb TestDB) Update(c characters.Character) error {
+	return nil
+}
+
+func TestAdventureReturningErrorOnPlayerWhichIsNotCreatedOnStart(t *testing.T) {
+	characters.DB = TestDB{}
+	router := gin.New()
+	router.POST("/api/1/start", StartAdventure)
+
+	req, _ := http.NewRequest("POST", "/api/1/start", strings.NewReader("{\"name\":\"not_found\"}"))
 	req.Header.Add("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
@@ -24,11 +51,11 @@ func TestAdventureReturningErrorOnPlayerWhichIsNotCreatedOnStart(t *testing.T) {
 }
 
 func TestAdventureReturningErrorOnPlayerWhichIsNotCreatedOnStop(t *testing.T) {
-	mdb = TestDB{}
+	characters.DB = TestDB{}
 	router := gin.New()
-	router.POST("/"+APIBASE+"/stop", stopAdventure)
+	router.POST("/api/1/stop", StopAdventure)
 
-	req, _ := http.NewRequest("POST", "/"+APIBASE+"/stop", strings.NewReader("{\"name\":\"not_found\"}"))
+	req, _ := http.NewRequest("POST", "/api/1/stop", strings.NewReader("{\"name\":\"not_found\"}"))
 	req.Header.Add("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
@@ -37,14 +64,14 @@ func TestAdventureReturningErrorOnPlayerWhichIsNotCreatedOnStop(t *testing.T) {
 }
 
 func TestStartingAdventuringForPlayerWhoIsAdventuring(t *testing.T) {
-	mdb = TestDB{}
+	characters.DB = TestDB{}
 	adventurersOnQuest.Lock()
 	adventurersOnQuest.m["onquest"] = true
 	adventurersOnQuest.Unlock()
 	router := gin.New()
-	router.POST("/"+APIBASE+"/start", startAdventure)
+	router.POST("/api/1/start", StartAdventure)
 
-	req, _ := http.NewRequest("POST", "/"+APIBASE+"/start", strings.NewReader("{\"name\":\"onquest\"}"))
+	req, _ := http.NewRequest("POST", "/api/1/start", strings.NewReader("{\"name\":\"onquest\"}"))
 	req.Header.Add("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
@@ -53,11 +80,11 @@ func TestStartingAdventuringForPlayerWhoIsAdventuring(t *testing.T) {
 }
 
 func TestErrorWhileBindingAdventurerOnStart(t *testing.T) {
-	mdb = TestDB{}
+	characters.DB = TestDB{}
 	router := gin.New()
-	router.POST("/"+APIBASE+"/start", startAdventure)
+	router.POST("/api/1/start", StartAdventure)
 
-	req, _ := http.NewRequest("POST", "/"+APIBASE+"/start", strings.NewReader("invalid"))
+	req, _ := http.NewRequest("POST", "/api/1/start", strings.NewReader("invalid"))
 	req.Header.Add("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
@@ -66,11 +93,11 @@ func TestErrorWhileBindingAdventurerOnStart(t *testing.T) {
 }
 
 func TestStopAdventuringForACharacterWhichIsNotAdventuring(t *testing.T) {
-	mdb = TestDB{}
+	characters.DB = TestDB{}
 	router := gin.New()
-	router.POST("/"+APIBASE+"/stop", stopAdventure)
+	router.POST("/api/1/stop", StopAdventure)
 
-	req, _ := http.NewRequest("POST", "/"+APIBASE+"/stop", strings.NewReader("{\"name\":\"notonquest\"}"))
+	req, _ := http.NewRequest("POST", "/api/1/stop", strings.NewReader("{\"name\":\"notonquest\"}"))
 	req.Header.Add("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
@@ -79,11 +106,11 @@ func TestStopAdventuringForACharacterWhichIsNotAdventuring(t *testing.T) {
 }
 
 func TestStopAdventuringInvalidJSON(t *testing.T) {
-	mdb = TestDB{}
+	characters.DB = TestDB{}
 	router := gin.New()
-	router.POST("/"+APIBASE+"/stop", stopAdventure)
+	router.POST("/api/1/stop", StopAdventure)
 
-	req, _ := http.NewRequest("POST", "/"+APIBASE+"/stop", strings.NewReader("invalid"))
+	req, _ := http.NewRequest("POST", "/api/1/stop", strings.NewReader("invalid"))
 	req.Header.Add("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
@@ -92,11 +119,11 @@ func TestStopAdventuringInvalidJSON(t *testing.T) {
 }
 
 func TestStartAdventuringForExistingPlayer(t *testing.T) {
-	mdb = TestDB{}
+	characters.DB = TestDB{}
 	router := gin.New()
-	router.POST("/"+APIBASE+"/start", startAdventure)
+	router.POST("/api/1/start", StartAdventure)
 
-	req, _ := http.NewRequest("POST", "/"+APIBASE+"/start", strings.NewReader("{\"name\":\"quester\"}"))
+	req, _ := http.NewRequest("POST", "/api/1/start", strings.NewReader("{\"name\":\"quester\"}"))
 	req.Header.Add("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)
@@ -105,13 +132,13 @@ func TestStartAdventuringForExistingPlayer(t *testing.T) {
 }
 
 func TestStopAdventuringForAdventurerWhoIsAdventuring(t *testing.T) {
-	mdb = TestDB{}
+	characters.DB = TestDB{}
 	router := gin.New()
 	adventurersOnQuest.Lock()
 	adventurersOnQuest.m["quester"] = true
 	adventurersOnQuest.Unlock()
-	router.POST("/"+APIBASE+"/stop", stopAdventure)
-	req, _ := http.NewRequest("POST", "/"+APIBASE+"/stop", strings.NewReader("{\"name\":\"quester\"}"))
+	router.POST("/api/1/stop", StopAdventure)
+	req, _ := http.NewRequest("POST", "/api/1/stop", strings.NewReader("{\"name\":\"quester\"}"))
 	req.Header.Add("Content-type", "application/json")
 	resp := httptest.NewRecorder()
 	router.ServeHTTP(resp, req)

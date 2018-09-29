@@ -1,0 +1,81 @@
+{
+	"monsters": [{
+		"name": "Barbra Streisand",
+		"id": 1,
+		"race": 1,
+		"cast": 1,
+		"items": [{
+			"id": 1,
+			"chance": 100
+		}],
+		"gold": 1,
+		"rare": 10,
+		"xp": 100,
+		"armor": 0,
+		"damage": 1
+	}, {
+		"name": "Raging Hamster",
+		"id": 2,
+		"race": 1,
+		"cast": 1,
+		"items": [{
+			"id": 10,
+			"chance": 50
+		}],
+		"gold": 100000000,
+		"rare": 1,
+		"xp": 200,
+		"armor": 1,
+		"damage": 2
+	}, {
+		"name": "Paranoid Dionarap",
+		"id": 3,
+		"race": 2,
+		"cast": 3,
+		"items": [{
+			"id": 5,
+			"chance": 100
+		}, {
+			"id": 4,
+			"chance": 20
+		}],
+		"gold": 6,
+		"rare": 5,
+		"xp": 300,
+		"armor": 2,
+		"damage": 3
+	}, {
+		"name": "Asdf",
+		"id": 4,
+		"race": 2,
+		"cast": 3,
+		"items": [{
+			"id": 5,
+			"chance": 100
+		}, {
+			"id": 4
+		}],
+		"gold": 6,
+		"rare": 5,
+		"xp": 400,
+		"armor": 3,
+		"damage": 4
+	}, {
+		"name": "Finn The Human",
+		"id": 5,
+		"race": 2,
+		"cast": 3,
+		"items": [{
+			"id": 5,
+			"chance": 10
+		}, {
+			"id": 4,
+			"chance": 1
+		}],
+		"gold": 6,
+		"rare": 5,
+		"xp": 500,
+		"armor": 4,
+		"damage": 5
+	}]
+}

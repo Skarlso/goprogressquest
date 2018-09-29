@@ -1,4 +1,4 @@
-package main
+package adventure
 
 import (
 	"fmt"
@@ -7,6 +7,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/Skarlso/goprogressquest/src/characters"
+	"github.com/Skarlso/goprogressquest/src/responsetypes"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,20 +23,20 @@ type AdventurerOnQuest struct {
 var adventurersOnQuest = AdventurerOnQuest{m: make(map[string]bool, 0)}
 
 // StartAdventure starts and adventure in an endless for loop, until a channel signals otherwise
-func startAdventure(c *gin.Context) {
+func StartAdventure(c *gin.Context) {
 
 	var adventurer struct {
 		Name string `json:"name"`
 	}
 
 	if err := c.BindJSON(&adventurer); err != nil {
-		c.JSON(http.StatusBadRequest, ErrorResponse{"error while binding adventurer:" + err.Error()})
+		c.JSON(http.StatusBadRequest, responsetypes.ErrorResponse{ErrorMessage: "error while binding adventurer:" + err.Error()})
 		return
 	}
 
-	char, err := mdb.Load(adventurer.Name)
+	char, err := characters.DB.Load(adventurer.Name)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, ErrorResponse{"Error occured while loading character:" + err.Error()})
+		c.JSON(http.StatusBadRequest, responsetypes.ErrorResponse{ErrorMessage: "Error occured while loading character:" + err.Error()})
 		return
 	}
 
@@ -43,13 +45,13 @@ func startAdventure(c *gin.Context) {
 	adventurersOnQuest.RUnlock()
 
 	if adv {
-		c.JSON(http.StatusBadRequest, ErrorResponse{"Error occured, adventurer is already adventuring!"})
+		c.JSON(http.StatusBadRequest, responsetypes.ErrorResponse{ErrorMessage: "Error occured, adventurer is already adventuring!"})
 		return
 	}
 
 	go adventuring(char.Name)
 
-	m := Message{}
+	m := responsetypes.Message{}
 	m.Message = "Started adventuring for character: " + char.Name
 	c.JSON(http.StatusOK, m)
 }
@@ -59,7 +61,7 @@ func adventuring(name string) {
 	adventurersOnQuest.m[name] = true
 	adventurersOnQuest.Unlock()
 	stop := false
-	player, err := mdb.Load(name)
+	player, err := characters.DB.Load(name)
 	if err != nil {
 		fmt.Println("could not load player... skipping adventure")
 		return
@@ -92,17 +94,17 @@ func adventuring(name string) {
 		// * Encounter
 		// * Discovery
 		// * Nothing
-		player.Attack(SpawnEnemy(player))
+		player.Attack(characters.SpawnEnemy(player))
 
 		if player.CurrentXp >= player.NextLevelXp {
 			player.LevelUp()
 		}
-		player.checkForBetterItems()
+		// player.checkForBetterItems()
 		time.Sleep(time.Millisecond * 500)
 	}
 }
 
-func invetoryIsOverLimit(c Character) bool {
+func invetoryIsOverLimit(c characters.Character) bool {
 	currCap := 0
 	for _, v := range c.Inventory.Items {
 		currCap += v.Weight
@@ -116,20 +118,20 @@ func invetoryIsOverLimit(c Character) bool {
 }
 
 // StopAdventure Stop adventuring
-func stopAdventure(c *gin.Context) {
+func StopAdventure(c *gin.Context) {
 	//signal channel to stop fight.
 	var adventurer struct {
 		Name string `json:"name"`
 	}
 
 	if err := c.BindJSON(&adventurer); err != nil {
-		c.JSON(http.StatusBadRequest, ErrorResponse{"error while binding adventurer:" + err.Error()})
+		c.JSON(http.StatusBadRequest, responsetypes.ErrorResponse{ErrorMessage: "error while binding adventurer:" + err.Error()})
 		return
 	}
 
-	char, err := mdb.Load(adventurer.Name)
+	char, err := characters.DB.Load(adventurer.Name)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, ErrorResponse{"Error occured while loading character:" + err.Error()})
+		c.JSON(http.StatusBadRequest, responsetypes.ErrorResponse{ErrorMessage: "Error occured while loading character:" + err.Error()})
 		return
 	}
 
@@ -139,7 +141,7 @@ func stopAdventure(c *gin.Context) {
 	adv := adventurersOnQuest.m[char.Name]
 	adventurersOnQuest.RUnlock()
 	if !adv {
-		c.JSON(http.StatusBadRequest, ErrorResponse{"Error occured, adventurer is not adventuring!"})
+		c.JSON(http.StatusBadRequest, responsetypes.ErrorResponse{ErrorMessage: "Error occured, adventurer is not adventuring!"})
 		return
 	}
 	select {
@@ -147,7 +149,7 @@ func stopAdventure(c *gin.Context) {
 	default:
 	}
 
-	m := Message{}
+	m := responsetypes.Message{}
 	m.Message = "Stop adventuring for character: " + char.Name
 	c.JSON(http.StatusOK, m)
 }
